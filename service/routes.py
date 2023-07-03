@@ -31,34 +31,39 @@ def index():
 # Place your REST API code here ...
 
 
+@app.route("/customers", methods=["GET"])
+def list_pets():
+    """Returns all of the Customers"""
+    app.logger.info("Request for Customer list")
+    customers = []
+    category = request.args.get("category")
+    name = request.args.get("name")
+    if category:
+        customers = Customer.find_by_category(category)
+    elif name:
+        customers = Customer.find_by_name(name)
+    else:
+        customers = Customer.all()
 
-# Create customers
-# -----------------------------------------------------------
-@app.route("/customers/<name>", methods=["POST"])
-def create_customers(name):
-    """Creates a new counter and stores it in the database
+    results = [Customer.serialize() for Customer in customers]
+    app.logger.info("Returning %d customers", len(results))
+    return jsonify(results), status.HTTP_200_OK
 
-    Args:
-        name (str): the name of the customers to create
 
-    Returns:
-        dict: the customers and it's value
+######################################################################
+# RETRIEVE A Customer
+######################################################################
+@app.route("/pets/<int:customer_id>", methods=["GET"])
+def get_pets(customer_id):
     """
-    app.logger.info(f"Request to Create customer {name}...")
+    Retrieve a single Customer
 
-    # See if the customer already exists and send an error if it does
-    Customer = Customer.find(name)
-    if Customer is not None:
-        abort(status.HTTP_409_CONFLICT, f"Counter {name} already exists")
+    This endpoint will return a Customer based on it's id
+    """
+    app.logger.info("Request for Customer with id: %s", customer_id)
+    Customer = Customer.find(customer_id)
+    if not Customer:
+        abort(status.HTTP_404_NOT_FOUND, f"Customer with id '{customer_id}' was not found.")
 
-    # Create the new customer
-    Customer = Customer(name)
-    Customer.create()
-
-    # Set the location header and return the new Customer
-    location_url = url_for("read_customers", name=name, _external=True)
-    return (
-        jsonify(counter.serialize()),
-        status.HTTP_201_CREATED,
-        {"Location": location_url},
-    )
+    app.logger.info("Returning Customer: %s", Customer.name)
+    return jsonify(Customer.serialize()), status.HTTP_200_OK

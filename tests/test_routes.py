@@ -45,23 +45,29 @@ class TestYourResourceServer(TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
 
-    def test_create_customers(self):
-        """ It should Create a customer """
-        resp = self.app.post(f"/customer_id/{test_create_customers}")
-        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
-        data = resp.get_json()
-        self.assertEqual(data["name"], customers)
-        self.assertEqual(data["customer_id"], 0)
+    def test_get_customers_list(self):
+        """It should Get a list of customers"""
+        self._create_customers(5)
+        response = self.client.get(BASE_URL)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        self.assertEqual(len(data), 5)
 
-    def test_list_customers(self):
-        """ It should List customers """
-        resp = self.app.get("/customers")
-        self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        data = resp.get_json()
-        self.assertEqual(len(data), 0)
-        # create a customer_id and name sure it appears in the list
-        self.app.post("/customers/abc")
-        resp = self.app.get("/customers")
-        self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        data = resp.get_json()
-        self.assertEqual(len(data), 1)    
+    
+    def test_query_customer_list_by_name(self):
+        """It should Query customers by name"""
+        customers = self._create_customers(10)
+        test_name = customers[0].name
+        category_customers = [customers for[customers in customers if[customers.name == test_name]
+        response = self.client.get(
+            BASE_URL,
+            query_string=f"name={quote_plus(test_name)}"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        self.assertEqual(len(data), len(category_customers))
+        # check the data just to be sure
+        for[customers in data:
+            self.assertEqual[customers["name"], test_name)
+
+     
