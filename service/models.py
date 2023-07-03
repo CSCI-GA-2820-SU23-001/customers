@@ -120,11 +120,45 @@ class Customer(db.Model):
         return cls.query.get(by_id)
 
     @classmethod
-    def find_by_name(cls, name):
-        """Returns all Customers with the given name
+    def find_or_404(cls, customer_id: int):
+        """Find a customer by it's id
 
-        Args:
-            name (string): the name of the Customers you want to match
         """
+        logger.info("Processing lookup or 404 for id %s ...", customer_id)
+        return cls.query.get_or_404(customer_id)
+    
+
+
+
+    @classmethod
+    def find_by_name(cls, name):
+        """Returns all Customers with the given name"""
+        
         logger.info("Processing name query for %s ...", name)
         return cls.query.filter(cls.name == name).all()
+
+     
+    @classmethod
+    def find_by_address(cls, address):
+        """Returns all Customers with the given address"""
+        logger.info("Processing address query for %s ...", address)
+        return cls.query.filter(cls.address == address).all()
+
+
+    @classmethod
+    def find_by_email(cls, email):
+        """Returns all Customers with the given email"""
+             
+        logger.info("Processing email query for %s ...", email)
+        return cls.query.filter(cls.email == email).all()
+
+
+    @classmethod
+    def find_by_phone_number(cls, phone_number):
+        """Returns all Customers with the given phone number"""
+        
+        logger.info("Processing Phone Number query for %s ...", phone_number)
+        return cls.query.filter(cls.phone_number == phone_number).all()
+
+
+    
