@@ -77,8 +77,21 @@ class TestYourResourceServer(TestCase):
         test_customer.name = "new"
         response = self.client.put(f"{BASE_URL}/{customer_id}",json=test_customer.serialize(),content_type = "application/json")
         self.assertEqual(response.status_code,status.HTTP_200_OK)
-        self.assertEqual(response.get_json()["name"],"new")
+
+        data = response.get_json()
+        self.assertEqual(test_customer.id,customer_id)
+        self.assertEqual(data["name"],"new")
+        self.assertEqual(data["address"],test_customer.address)
+        self.assertEqual(data["email"],test_customer.email)
+        self.assertEqual(data["phone_number"],test_customer.phone_number)
+        self.assertEqual(data["password"],test_customer.password)
         return test_customer
+    
+
+    def test_update_nonexist_customer(self):
+        response = self.client.put(f"{BASE_URL}/{9999}",json=test_customer.serialize(),content_type = "application/json")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
 
     ######################################################################
     #  P L A C E   T E S T   C A S E S   H E R E
