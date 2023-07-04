@@ -65,7 +65,7 @@ def create_customers():
 
     app.logger.info("Customer with ID [%s] created.", customer.id)
 
-    return jsonify(message), status.HTTP_201_CREATED
+    return jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
 
 
 ######################################################################

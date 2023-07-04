@@ -89,7 +89,7 @@ class TestYourResourceServer(TestCase):
     
 
     def test_update_nonexist_customer(self):
-        response = self.client.put(f"{BASE_URL}/{9999}",json=test_customer.serialize(),content_type = "application/json")
+        response = self.client.put(f"{BASE_URL}/{9999}")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
