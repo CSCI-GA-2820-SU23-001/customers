@@ -7,6 +7,7 @@ import logging
 import unittest
 from service.models import Customer, db
 from service import app
+from tests.factories import CustomerFactory
 
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/testdb"
@@ -39,8 +40,7 @@ class TestCustomer(unittest.TestCase):
     def tearDown(self):
         """ This runs after each test """
         db.session.remove()
-       
-
+    
     ######################################################################
     #  T E S T   C A S E S
     ######################################################################
@@ -48,3 +48,19 @@ class TestCustomer(unittest.TestCase):
     def test_example_replace_this(self):
         """ It should always be true """
         self.assertTrue(True)
+
+    
+    def test_delete_customer(self):
+        """It should delete a customer"""
+        customer = CustomerFactory()
+        customer.create()
+        self.assertIsNotNone(customer.id)
+        customer = customer.find(customer.id)
+        self.assertTrue(customer)
+        customer.delete()
+        customer = Customer.all()
+        self.assertEqual(len(customer),0)
+
+        
+
+

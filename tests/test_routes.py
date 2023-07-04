@@ -89,3 +89,24 @@ class TestYourResourceServer(TestCase):
         data = response.get_json()
         logging.debug("Response data = %s", data)
         self.assertIn("was not found", data["message"])
+
+    def test_delete_customer(self):
+        """It should delete a customer"""
+        customer = self._create_customers(1)[0]
+        resp = self.client.get(f'{BASE_URL}/{customer.id}')
+        self.assertEqual(status.HTTP_200_OK,resp.status_code)
+
+        data = resp.get_json()
+        self.assertTrue(data)
+
+        customer_id = data['id']
+        resp = self.client.delete(f"{BASE_URL}/{customer_id}")
+        self.assertEqual(status.HTTP_204_NO_CONTENT,resp.status_code)
+
+        resp = self.client.get(f"{BASE_URL}/{customer_id}")
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_delete_not_found(self):
+        """It should not delete a customer thats not found"""
+        resp = self.client.delete(f"{BASE_URL}/-1")
+        self.assertEqual(resp.status_code,status.HTTP_404_NOT_FOUND)
