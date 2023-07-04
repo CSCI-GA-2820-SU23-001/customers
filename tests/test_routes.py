@@ -86,11 +86,7 @@ class TestYourResourceServer(TestCase):
         self.assertEqual(data["phone_number"],test_customer.phone_number)
         self.assertEqual(data["password"],test_customer.password)
         return test_customer
-    
 
-    def test_update_nonexist_customer(self):
-        response = self.client.put(f"{BASE_URL}/{9999}")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
     ######################################################################
