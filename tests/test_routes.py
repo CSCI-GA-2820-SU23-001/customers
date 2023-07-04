@@ -63,6 +63,34 @@ class TestYourResourceServer(TestCase):
             test_customer.id = new_customer["id"]
             customers.append(test_customer)
         return customers
+    
+    def _update_customers(self):
+        """ Factory method to create customers in bulk """
+        test_customer = self._create_customers(1)[0]
+        response = self.client.post(f"{BASE_URL}",json=test_customer.serialize(),content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        data = response.get_json()
+        logging.debug(data)
+        customer_id = data["id"]
+
+        test_customer.name = "new"
+        response = self.client.put(f"{BASE_URL}/{customer_id}",json=test_customer.serialize(),content_type = "application/json")
+        self.assertEqual(response.status_code,status.HTTP_200_OK)
+
+        data = response.get_json()
+        self.assertEqual(test_customer.id,customer_id)
+        self.assertEqual(data["name"],"new")
+        self.assertEqual(data["address"],test_customer.address)
+        self.assertEqual(data["email"],test_customer.email)
+        self.assertEqual(data["phone_number"],test_customer.phone_number)
+        self.assertEqual(data["password"],test_customer.password)
+        return test_customer
+    
+
+    def test_update_nonexist_customer(self):
+        response = self.client.put(f"{BASE_URL}/{9999}")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
     ######################################################################
@@ -112,3 +140,24 @@ class TestYourResourceServer(TestCase):
         self.assertEqual(data["email"],test_customer.email)
         self.assertEqual(data["phone_number"],test_customer.phone_number)
         self.assertEqual(data["password"],test_customer.password)
+
+    def test_delete_customer(self):
+        """It should delete a customer"""
+        customer = self._create_customers(1)[0]
+        resp = self.client.get(f'{BASE_URL}/{customer.id}')
+        self.assertEqual(status.HTTP_200_OK,resp.status_code)
+
+        data = resp.get_json()
+        self.assertTrue(data)
+
+        customer_id = data['id']
+        resp = self.client.delete(f"{BASE_URL}/{customer_id}")
+        self.assertEqual(status.HTTP_204_NO_CONTENT,resp.status_code)
+
+        resp = self.client.get(f"{BASE_URL}/{customer_id}")
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_delete_not_found(self):
+        """It should not delete a customer thats not found"""
+        resp = self.client.delete(f"{BASE_URL}/-1")
+        self.assertEqual(resp.status_code,status.HTTP_404_NOT_FOUND)
