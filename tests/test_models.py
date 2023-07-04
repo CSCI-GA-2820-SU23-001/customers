@@ -104,12 +104,46 @@ class TestCustomer(unittest.TestCase):
 
 
 
-    def test_update_no_id(self):
+    def test_update_not_exsist(self):
         """It should not Update an non-exist Customer"""
         customer = CustomerFactory()
         logging.debug(customer)
         customer.id = None
         self.assertRaises(DataValidationError, customer.update)
+
+
+    def test_serialize_a_customer(self):
+        """It should serialize a Customer"""
+        customer = CustomerFactory()
+        data = customer.serialize()
+        self.assertNotEqual(data, None)
+        self.assertIn("id", data)
+        self.assertEqual(data["id"], customer.id)
+        self.assertIn("name", data)
+        self.assertEqual(data["name"], customer.name)
+        self.assertIn("phone_number", data)
+        self.assertEqual(data["phone_number"], customer.phone_number)
+        self.assertIn("password", data)
+        self.assertEqual(data["password"], customer.password)
+        self.assertIn("address", data)
+        self.assertEqual(data["address"], customer.address)
+        self.assertIn("email", data)
+        self.assertEqual(data["email"], customer.email)
+
+
+    def test_deserialize_a_customer(self):
+        """It should de-serialize a Customer"""
+        data = CustomerFactory().serialize()
+        customer = Customer()
+        customer.deserialize(data)
+        self.assertNotEqual(customer, None)
+        self.assertEqual(customer.id, None)
+        self.assertEqual(customer.name, data["name"])
+        self.assertEqual(customer.password, data["password"])
+        self.assertEqual(customer.address, data["address"])
+        self.assertEqual(customer.email, data["email"])
+        self.assertEqual(customer.phone_number, data["phone_number"])
+
     
 
 
