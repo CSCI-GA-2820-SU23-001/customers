@@ -65,7 +65,31 @@ def create_customers():
 
     app.logger.info("Customer with ID [%s] created.", customer.id)
 
-    return jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
+    return jsonify(message), status.HTTP_201_CREATED
+
+
+######################################################################
+# MODIFY A CUSTOMER
+######################################################################
+@app.route("/customers/<int:id>", methods=["PUT"])
+def update_customers(id):
+    """
+    Update a customer
+    This endpoint will return a Customer based on it's id
+    """
+    app.logger.info("Request to update customer with id: %s", id)
+    check_content_type("application/json")
+    
+    customer = Customer.find(id)
+    if not customer:
+        abort(status.HTTP_404_NOT_FOUND, f"Customer with id '{id}' was not found.")
+    customer.deserialize(request.get_json())
+    customer.update()
+    message = customer.serialize()
+    app.logger.info("Customer with ID [%s] updated.", customer.id)
+    return jsonify(message), status.HTTP_200_OK
+
+
 
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S

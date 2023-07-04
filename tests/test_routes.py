@@ -63,6 +63,22 @@ class TestYourResourceServer(TestCase):
             test_customer.id = new_customer["id"]
             customers.append(test_customer)
         return customers
+    
+    def _update_customers(self):
+        """ Factory method to create customers in bulk """
+        test_customer = self._create_customers(1)[0]
+        response = self.client.post(f"{BASE_URL}",json=test_customer.serialize(),content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        data = response.get_json()
+        logging.debug(data)
+        customer_id = data["id"]
+
+        test_customer.name = "new"
+        response = self.client.put(f"{BASE_URL}/{customer_id}",json=test_customer.serialize(),content_type = "application/json")
+        self.assertEqual(response.status_code,status.HTTP_200_OK)
+        self.assertEqual(response.get_json()["name"],"new")
+        return test_customer
 
     ######################################################################
     #  P L A C E   T E S T   C A S E S   H E R E
