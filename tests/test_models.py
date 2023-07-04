@@ -5,7 +5,7 @@ Test cases for Customer Model
 import os
 import logging
 import unittest
-from service.models import Customer, db
+from service.models import Customer, db, DataValidationError
 from service import app
 from tests.factories import CustomerFactory
 
@@ -52,7 +52,7 @@ class TestCustomer(unittest.TestCase):
 
 
     def test_create_a_customer(self):
-        """It should Create a product and assert that it exists"""
+        """It should Create a Customer"""
         customer = Customer(name="c1", id = 1, address = "address1", phone_number = "123456", email="c1@gmail.com", password = "c1")
         self.assertTrue(customer is not None)
         self.assertEqual(customer.id, 1)
@@ -64,6 +64,7 @@ class TestCustomer(unittest.TestCase):
 
 
     def test_read_a_customer(self):
+        """It should Read a Customer"""
         customer = CustomerFactory()
         logging.debug(customer)
         customer.id = None
@@ -77,6 +78,38 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(found_customer.phone_number, customer.phone_number)
         self.assertEqual(found_customer.password, customer.password)
         self.assertEqual(found_customer.email, customer.email)
+
+
+    def test_update_a_customer(self):
+        """It should Update a Customer"""
+        customer = CustomerFactory()
+        logging.debug(customer)
+        customer.id = None
+        customer.create()
+        logging.debug(customer)
+        self.assertIsNotNone(customer.id)
+        # Change it an save it
+        customer.name = "customer2"
+        original_id = customer.id
+        customer.update()
+        self.assertEqual(customer.id, original_id)
+        self.assertEqual(customer.name, "customer2")
+        # Fetch it back and make sure the id hasn't changed
+        # but the data did change
+        customers = Customer.all()
+        self.assertEqual(len(customers), 1)
+        self.assertEqual(customers[0].id, original_id)
+        self.assertEqual(customers[0].name, "customer2")
+
+
+
+
+    def test_update_no_id(self):
+        """It should not Update an non-exist Customer"""
+        customer = CustomerFactory()
+        logging.debug(customer)
+        customer.id = None
+        self.assertRaises(DataValidationError, customer.update)
     
 
 
