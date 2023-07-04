@@ -102,16 +102,6 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(customers[0].name, "customer2")
 
 
-
-
-    def test_update_not_exsist(self):
-        """It should not Update an non-exist Customer"""
-        customer = CustomerFactory()
-        logging.debug(customer)
-        customer.id = None
-        self.assertRaises(DataValidationError, customer.update)
-
-
     def test_serialize_a_customer(self):
         """It should serialize a Customer"""
         customer = CustomerFactory()

@@ -84,6 +84,7 @@ def update_customers(id):
     if not customer:
         abort(status.HTTP_404_NOT_FOUND, f"Customer with id '{id}' was not found.")
     customer.deserialize(request.get_json())
+    customer.id = id
     customer.update()
     message = customer.serialize()
     app.logger.info("Customer with ID [%s] updated.", customer.id)
