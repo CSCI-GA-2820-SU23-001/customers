@@ -27,6 +27,197 @@ These should be copied using a bash shell as follows:
     cp .gitattributes ../<your_repo_folder>/
 ```
 
+## Customer Service APIs
+
+### Customer Operations
+
+| Endpoint          | Methods | Rule
+| ---------------   | ------- | --------------------------
+| create_a_customer | POST    | ```/customers```
+| read_a_customer   | GET     | ```/customers/{int:customer_id}```
+| update_a_customer | PUT     | ```/customers/{int:customer_id}```
+| delete_a_customer | DELETE  | ```/customers/{int:customer_id}```
+| list_customers    | GET     | ```/customers```
+
+## APIs Usage
+
+### Create a Customer
+URL : `http://127.0.0.1:8000/customers`
+
+Method : POST
+
+Auth required : No
+
+Permissions required : No
+
+Create a customer using a JSON file that includes the customers's name, address, email, phone_number and password.
+
+Example:
+
+Request Body (JSON)
+```
+{
+  "name": "John Doe",
+  "address": "5th Fifth Ave, NY",
+  "email": "john@gmail.com",
+  "phone_number": "12345678",
+  "password": "password"
+}
+
+
+```
+
+Success Response : `HTTP_201_CREATED`
+```
+[
+  {
+    "id":1,
+    "name": "John Doe",
+    "address": "5th Fifth Ave, NY",
+    "email": "john@gmail.com",
+    "phone_number": "12345678",
+    "password": "password"
+}
+]
+```
+
+### Read a Customer 
+
+URL : `http://127.0.0.1:8000/customers/{int:customer_id}`
+
+Method : GET
+
+Auth required : No
+
+Permissions required : No
+
+Read all information of a customer with given id
+
+Example:
+
+Success Response : `HTTP_200_OK`
+```
+[
+  {
+    "id":1,
+    "name": "John Doe",
+    "address": "5th Fifth Ave, NY",
+    "email": "john@gmail.com",
+    "phone_number": "12345678",
+    "password": "password"
+}
+]
+```
+
+Failure Response : `HTTP_404_NOT_FOUND`
+```
+{
+  "error": "Not Found",
+  "message": "404 Not Found: CUstomer with id '3' was not found.",
+  "status": 404
+}
+
+```
+
+### Update a Customer 
+
+
+URL : `http://127.0.0.1:8000/customers/{int:customer_id}`
+
+Method : PUT
+
+Auth required : No
+
+Permissions required : No
+
+Updates a customer with id provided in the URL according to the updated fields provided in the body
+
+Example:
+
+Request Body (JSON)
+```
+  {
+    "id":1,
+    "name": "John Foo",
+    "address": "5th Fifth Ave, NY",
+    "email": "john@gmail.com",
+    "phone_number": "12345678",
+    "password": "password"
+}
+```
+
+
+Success Response : `HTTP_200_OK`
+```
+[
+  {
+    "id":1,
+    "name": "John Foo",
+    "address": "5th Fifth Ave, NY",
+    "email": "john@gmail.com",
+    "phone_number": "12345678",
+    "password": "password"
+}
+]
+
+```
+
+Failure Response : `HTTP_404_NOT_FOUND`
+```
+{
+  "error": "Not Found",
+  "message": "404 Not Found: Customer with id '2' was not found.",
+  "status": 404
+}
+
+```
+
+### Delete a Customer
+
+URL : `http://127.0.0.1:8000/customers/{int:customer_id}`
+
+Method : DELETE
+
+Auth required : No
+
+Permissions required : No
+
+Deletes a Customer with id
+
+Example:
+
+Success Response : `204 NO CONTENT`
+
+
+### List Customers
+
+URL : `http://127.0.0.1:8000/customers` 
+
+Method: GET
+
+Auth required : No
+
+Permissions required : No
+
+List All Customers
+
+Example:
+
+Success Response : `HTTP_200_OK`
+
+```
+[
+  {
+    "id":1,
+    "name": "John Foo",
+    "address": "5th Fifth Ave, NY",
+    "email": "john@gmail.com",
+    "phone_number": "12345678",
+    "password": "password"
+}
+]
+```
+
 ## Contents
 
 The project contains the following:
