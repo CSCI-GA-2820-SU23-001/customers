@@ -17,6 +17,52 @@ DATABASE_URI = os.getenv(
 ######################################################################
 class TestCustomer(unittest.TestCase):
     """ Test Cases for Customer Model """
+    def test_repr(self):
+        """It should provide a string representation of a Customer"""
+        customer = Customer(name="c1", id = 1, address = "address1", phone_number = "123456", email="c1@gmail.com", password = "c1")
+        self.assertEqual(repr(customer), f"<Customer c1 id=[1]>")
+
+
+
+    def test_deserialize_key_error(self):
+        """It should raise a DataValidationError when a key is missing during deserialization"""
+        data = {"name": "c1", "address": "address1", "phone_number": "123456", "email":"c1@gmail.com", "password": "c1"}
+        customer = Customer()
+        del data['name']  # remove a key to trigger KeyError
+        try:
+            customer.deserialize(data)
+        except DataValidationError as e:
+            self.assertEqual(str(e), "Invalid Customer: missing name")
+        else:
+            self.fail("KeyError not raised")
+
+    def test_deserialize_type_error(self):
+        """It should raise a DataValidationError when a bad type is provided during deserialization"""
+        data = ["Not a dictionary"]  # not a dictionary
+        customer = Customer()
+        try:
+            customer.deserialize(data)
+        except DataValidationError as e:
+            self.assertTrue("Invalid Customer: body of request contained bad or no data" in str(e))
+        else:
+            self.fail("TypeError not raised")
+
+    def test_find_by_name(self):
+        """It should find Customers by their name"""
+        customers = [CustomerFactory(name="test name") for _ in range(3)]
+        for customer in customers:
+            customer.create()
+
+        # make sure they got saved
+        self.assertEqual(len(Customer.all()), 3)
+
+        # find them by name
+        same_name_customers = Customer.find_by_name("test name")
+
+        self.assertEqual(len(same_name_customers), 3)
+        for customer in same_name_customers:
+            self.assertEqual(customer.name, "test name")
+
 
     @classmethod
     def setUpClass(cls):
