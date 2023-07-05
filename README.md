@@ -33,9 +33,9 @@ These should be copied using a bash shell as follows:
 
 | Endpoint          | Methods | Rule
 | ---------------   | ------- | --------------------------
-| create_a_customer | POST    | ```/customers```
-| read_a_customer   | GET     | ```/customers/{int:customer_id}```
-| update_a_customer | PUT     | ```/customers/{int:customer_id}```
+| create_customers  | POST    | ```/customers```
+| get_customers     | GET     | ```/customers/{int:customer_id}```
+| update_customers  | PUT     | ```/customers/{int:customer_id}```
 | delete_a_customer | DELETE  | ```/customers/{int:customer_id}```
 | list_customers    | GET     | ```/customers```
 
@@ -67,7 +67,7 @@ Request Body (JSON)
 
 ```
 
-Success Response : `HTTP_201_CREATED`
+Success Response : `HTTP_200_CREATED`
 ```
 [
   {
@@ -113,7 +113,7 @@ Failure Response : `HTTP_404_NOT_FOUND`
 ```
 {
   "error": "Not Found",
-  "message": "404 Not Found: CUstomer with id '3' was not found.",
+  "message": "404 Not Found: Customer with id '3' was not found.",
   "status": 404
 }
 
@@ -137,7 +137,6 @@ Example:
 Request Body (JSON)
 ```
   {
-    "id":1,
     "name": "John Foo",
     "address": "5th Fifth Ave, NY",
     "email": "john@gmail.com",
@@ -190,6 +189,8 @@ Success Response : `204 NO CONTENT`
 
 
 ### List Customers
+
+This is the planned version of listing customers. Currently the listing part still have some errors
 
 URL : `http://127.0.0.1:8000/customers` 
 
@@ -261,7 +262,7 @@ To test and check the coverage:
 $ green
 ```
 
-The result is supposed to be:
+Later this semester, github actions will be added to allow the auto testing. Currently we manually list the result: 
 
 ```
 Name                               Stmts   Miss  Cover   Missing
