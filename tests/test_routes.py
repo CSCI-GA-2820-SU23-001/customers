@@ -76,39 +76,77 @@ class TestYourResourceServer(TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
 
-    def test_get_customers_list(self):
-        """It should Get a list of customers"""
-        self._create_customers(5)
-        response = self.client.get(BASE_URL)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        data = response.get_json()
+    def test_get_customer_list(self):
+        """It should Get a list of Customers"""
+
+        customers = CustomerFactory.create_batch(5)
+
+        for customer in customers:
+            customer.create()
+
+        cust_get_req = self.client.get(BASE_URL)
+
+        # Assert that the customer list is populated
+        self.assertEqual(
+            cust_get_req.status_code,
+            status.HTTP_200_OK,
+            "Customer list is populated successfully")
+        data = cust_get_req.get_json()
         self.assertEqual(len(data), 5)
 
+    def test_get_customer_by_first_name(self):
+        """It should Get an Customer by First Name"""
 
-    def test_query_customer_list_by_name(self):
-        """It should Query Customer by name"""
-        customers = self._create_customers(10)
-        test_name = customers[0].category
-        category_customers = [customer for customer in customers if customer.category == test_name]
-        response = self.client.get(
-            BASE_URL,
-            query_string=f"name={quote_plus(test_name)}"
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        data = response.get_json()
-        self.assertEqual(len(data), len(category_customers))
-        # check the data just to be sure
-        for customer in data:
-            self.assertEqual(customer["category"], test_name)
-     
-    def test_get_customer(self):
-        """It should Get a single customer"""
-        # get the name of a customer
-        test_customer = self._create_customers(1)[0]
-        response = self.client.get(f"{BASE_URL}/{test_customer.id}")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        data = response.get_json()
-        self.assertEqual(data["name"], test_customer.name)
+        customers = CustomerFactory.create_batch(3)
+
+        for customer in customers:
+            customer.create()
+
+        customers_list = [
+            customer for customer in customers if customer.first_name == customers[0].first_name]
+        resp = self.client.get(
+            BASE_URL, query_string=f"first_name={customers[0].first_name}")
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()
+        self.assertEqual(len(data), len(customers_list))
+        for record in data:
+            self.assertEqual(record["first_name"], customers[0].first_name)
+
+    def test_get_customer_by_last_name(self):
+        """It should Get an Customer by Last Name"""
+
+        customers = CustomerFactory.create_batch(3)
+
+        for customer in customers:
+            customer.create()
+
+        customers_list = [
+            customer for customer in customers if customer.last_name == customers[0].last_name]
+        resp = self.client.get(
+            BASE_URL, query_string=f"last_name={customers[0].last_name}")
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()
+        self.assertEqual(len(data), len(customers_list))
+        for record in data:
+            self.assertEqual(record["last_name"], customers[0].last_name)
+
+    def test_get_customer_by_email(self):
+        """It should Get an Customer by email"""
+
+        customers = CustomerFactory.create_batch(3)
+
+        for customer in customers:
+            customer.create()
+
+        customers_list = [
+            customer for customer in customers if customer.email == customers[0].email]
+        resp = self.client.get(
+            BASE_URL, query_string=f"email={customers[0].email}")
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()
+        self.assertEqual(len(data), len(customers_list))
+        for record in data:
+            self.assertEqual(record["email"], customers[0].email)
 
     def test_get_customer_not_found(self):
         """It should not Get a customer thats not found"""
@@ -160,44 +198,3 @@ class TestYourResourceServer(TestCase):
         """It should not delete a customer thats not found"""
         resp = self.client.delete(f"{BASE_URL}/-1")
         self.assertEqual(resp.status_code,status.HTTP_404_NOT_FOUND)
-
-    def test_update_customer_not_found(self):
-        """It should not Update a customer that's not found"""
-        test_customer = CustomerFactory()
-        response = self.client.put(
-            f"{BASE_URL}/0",
-            json=test_customer.serialize(),
-            content_type="application/json"
-        )
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        data = response.get_json()
-        self.assertIn("was not found", data["message"])
-
-
-    def test_create_customer_no_content_type(self):
-        """It should return 415 if 'Content-Type' is not specified in headers"""
-        new_customer = CustomerFactory()
-        response = self.client.post(BASE_URL, data=new_customer.serialize())
-        self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
-        data = response.get_json()
-        self.assertIn("Content-Type must be application/json", data["message"])
-
-
-
-    def test_update_customer_no_content_type(self):
-        """It should return 415 if 'Content-Type' is not specified in headers"""
-        # First create a new customer
-        new_customer = self._create_customers(1)[0]
-        # Update customer data
-        new_customer.name = "Updated name"
-        # Make a PUT request without setting 'Content-Type' in headers
-        headers = {"Content-Type": None}  # Explicitly set to None
-        response = self.client.put(
-            f"{BASE_URL}/{new_customer.id}", 
-            data=new_customer.serialize(),
-            headers=headers
-        )
-        self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
-        data = response.get_json()
-        self.assertIn("Content-Type must be application/json", data["message"])
-

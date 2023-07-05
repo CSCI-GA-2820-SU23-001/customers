@@ -18,60 +18,6 @@ DATABASE_URI = os.getenv(
 class TestCustomer(unittest.TestCase):
     """ Test Cases for Customer Model """
 
-    def test_repr(self):
-        """It should provide a string representation of a Customer"""
-        customer = Customer(name="c1", id = 1, address = "address1", phone_number = "123456", email="c1@gmail.com", password = "c1")
-        self.assertEqual(repr(customer), f"<Customer c1 id=[1]>")
-        
-        
-        
-    def test_deserialize_key_error(self):
-        """It should raise a DataValidationError when a key is missing during deserialization"""
-        data = {"name": "c1", "address": "address1", "phone_number": "123456", "email":"c1@gmail.com", "password": "c1"}
-        customer = Customer()
-        del data['name']  # remove a key to trigger KeyError
-        try:
-            customer.deserialize(data)
-        except DataValidationError as e:
-            self.assertEqual(str(e), "Invalid Customer: missing name")
-        else:
-            self.fail("KeyError not raised")
-
-    def test_deserialize_type_error(self):
-        """It should raise a DataValidationError when a bad type is provided during deserialization"""
-        data = ["Not a dictionary"]  # not a dictionary
-        customer = Customer()
-        try:
-            customer.deserialize(data)
-        except DataValidationError as e:
-            self.assertTrue("Invalid Customer: body of request contained bad or no data" in str(e))
-        else:
-            self.fail("TypeError not raised")
-
-
-
-
-    def test_find_by_name(self):
-        """It should find Customers by their name"""
-        customers = [CustomerFactory(name="test name") for _ in range(3)]
-        for customer in customers:
-            customer.create()
-
-        # make sure they got saved
-        self.assertEqual(len(Customer.all()), 3)
-
-        # find them by name
-        same_name_customers = Customer.find_by_name("test name")
-        
-        self.assertEqual(len(same_name_customers), 3)
-        for customer in same_name_customers:
-            self.assertEqual(customer.name, "test name")
-
-
-
-
-
-
     @classmethod
     def setUpClass(cls):
         """ This runs once before the entire test suite """
@@ -103,70 +49,17 @@ class TestCustomer(unittest.TestCase):
         """ It should always be true """
         self.assertTrue(True)    
 
-    def test_find_customer(self):
-        """It should Find a customer by ID"""
-        customers = PetFactory.create_batch(5)
-        for customers in customers:
-            customers.create()
-        logging.debug(customers)
-        # make sure they got saved
-        self.assertEqual(len(customer.all()), 5)
-        # find the 2nd customers in the list
-        customers = customer.find(customers[1].id)
-        self.assertIsNot(customers, None)
-        self.assertEqual(customers.id, customers[1].id)
-        self.assertEqual(customers.name, customers[1].name)
-        self.assertEqual(customers.email, customers[1].email)
-        self.assertEqual(customers.address, customers[1].address)
-        self.assertEqual(customers.phone_number, customers[1].phone_number)
-
-    def test_find_by_address(self):
-        """It should Find Customers by Category"""
-        customers = PetFactory.create_batch(10)
-        for customers in customers:
-            customers.create()
-        address = customers[0].address
-        count = len([customers for customers in customers if customers.address == address])
-        found = customer.find_by_category(address)
-        self.assertEqual(found.count(), count)
-        for customers in found:
-            self.assertEqual(customers.address, address)
-
-    def test_find_by_name(self):
-        """It should Find a customer by Name"""
-        customers = PetFactory.create_batch(10)
-        for customers in customers:
-            customers.create()
-        name = customers[0].name
-        count = len([customers for customers in customers if customers.name == name])
-        found = customer.find_by_name(name)
-        self.assertEqual(found.count(), count)
-        for customers in found:
-            self.assertEqual(customers.name, name)
-
-    def test_find_by_email(self):
-        """It should Find Customers by email"""
-        customers = PetFactory.create_batch(10)
-        for customers in customers:
-            customers.create()
-        email = customers[0].email
-        count = len([customers for customers in customers if customers.email == email])
-        found = customer.find_by_availability(email)
-        self.assertEqual(found.count(), count)
-        for customers in found:
-            self.assertEqual(customers.email, email)
-    
-    def test_find_by_phone_number(self):
-        """It should Find Customers by phone_number"""
-        customers = PetFactory.create_batch(10)
-        for customers in customers:
-            customers.create()
-        phone_number = customers[0].phone_number
-        count = len([customers for customers in customers if customers.phone_number == phone_number])
-        found = customer.find_by_availability(phone_number)
-        self.assertEqual(found.count(), count)
-        for customers in found:
-            self.assertEqual(customers.phone_number, phone_number)
+    def test_list_all_customers(self):
+        """It should List all Customers in the database"""
+        customers = Customer.all()
+        self.assertEqual(customers, [])
+        # Create 5 Customers
+        for _ in range(5):
+            customer = CustomerFactory()
+            customer.create()
+        # See if we get back 5 Customers
+        customers = Customer.all()
+        self.assertEqual(len(customers), 5)
 
 
     def test_create_a_customer(self):

@@ -147,17 +147,3 @@ def list_customers():
     results = [Customer.serialize() for Customer in customers]
     app.logger.info("Returning %d customers", len(results))
     return jsonify(results), status.HTTP_200_OK
-
-
-######################################################################
-# RETRIEVE A Customer
-######################################################################
-@app.route("/customers/<int:customer_id>", methods=["GET"])
-def get_customers(customer_id):
-    app.logger.info("Request for customer with id: %s", id)
-    customer = Customer.find(id)
-    if not customer:
-        abort(status.HTTP_404_NOT_FOUND, f"Customer with id '{id}' was not found.")
-
-    app.logger.info("Returning customer: %s", customer.name)
-    return jsonify(customer.serialize()), status.HTTP_200_OK
