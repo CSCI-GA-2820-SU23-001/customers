@@ -246,6 +246,38 @@ tests/              - test cases package
 └── test_routes.py  - test suite for service routes
 ```
 
+## Running the service
+
+The project uses *honcho* which gets it's commands from the `Procfile`. To start the service:
+
+```shell
+$ honcho start
+```
+
+You could reach the service at: http://localhost:8000 as defined in the `.flaskenv` file, which Flask uses to load it's configuration from the environment by default.
+
+To test and check the coverage: 
+```shell
+$ green
+```
+
+The result is supposed to be:
+
+```
+Name                               Stmts   Miss  Cover   Missing
+----------------------------------------------------------------
+service/__init__.py                   17      2    88%   31-32
+service/common/cli_commands.py         7      0   100%
+service/common/error_handlers.py      38      6    84%   77-79, 107-109
+service/common/log_handlers.py        11      1    91%   35
+service/common/status.py              45      0   100%
+service/config.py                      5      0   100%
+service/models.py                     59      0   100%
+service/routes.py                     55      2    96%   117-118
+----------------------------------------------------------------
+TOTAL                                237     11    95%
+```
+
 ## License
 
 Copyright (c) John Rofrano. All rights reserved.
