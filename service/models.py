@@ -93,7 +93,7 @@ class Customer(db.Model):
         except TypeError as error:
             raise DataValidationError(
                 "Invalid Customer: body of request contained bad or no data - "
-                "Error message: " + error
+                "Error message: " + str(error)
             ) from error
         return self
 
