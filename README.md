@@ -278,6 +278,8 @@ service/routes.py                     55      2    96%   117-118
 TOTAL                                237     11    95%
 ```
 
+Currently the listing api is still missing, once its work finishes, the pull request will be merged. Thus, the actual coverage of routes is expected to be higher.
+
 ## License
 
 Copyright (c) John Rofrano. All rights reserved.
