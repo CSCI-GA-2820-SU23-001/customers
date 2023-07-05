@@ -9,6 +9,7 @@ import os
 import logging
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
+from urllib.parse import quote_plus
 from service import app
 from service.models import db, init_db, Customer
 from service.common import status  # HTTP Status Codes
@@ -83,12 +84,12 @@ class TestYourResourceServer(TestCase):
         data = response.get_json()
         self.assertEqual(len(data), 5)
 
-    
+
     def test_query_customer_list_by_name(self):
-        """It should Query customers by name"""
+        """It should Query Customer by name"""
         customers = self._create_customers(10)
-        test_name = customers[0].name
-        category_customers = [customers for[customers in customers if[customers.name == test_name]
+        test_name = customers[0].category
+        category_customers = [customer for customer in customers if customer.category == test_name]
         response = self.client.get(
             BASE_URL,
             query_string=f"name={quote_plus(test_name)}"
@@ -97,9 +98,8 @@ class TestYourResourceServer(TestCase):
         data = response.get_json()
         self.assertEqual(len(data), len(category_customers))
         # check the data just to be sure
-        for[customers in data:
-            self.assertEqual[customers["name"], test_name)
-
+        for customer in data:
+            self.assertEqual(customer["category"], test_name)
      
     def test_get_customer(self):
         """It should Get a single customer"""
