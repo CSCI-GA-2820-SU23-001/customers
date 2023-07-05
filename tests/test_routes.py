@@ -160,3 +160,44 @@ class TestYourResourceServer(TestCase):
         """It should not delete a customer thats not found"""
         resp = self.client.delete(f"{BASE_URL}/-1")
         self.assertEqual(resp.status_code,status.HTTP_404_NOT_FOUND)
+
+    def test_update_customer_not_found(self):
+        """It should not Update a customer that's not found"""
+        test_customer = CustomerFactory()
+        response = self.client.put(
+            f"{BASE_URL}/0",
+            json=test_customer.serialize(),
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        data = response.get_json()
+        self.assertIn("was not found", data["message"])
+
+
+    def test_create_customer_no_content_type(self):
+        """It should return 415 if 'Content-Type' is not specified in headers"""
+        new_customer = CustomerFactory()
+        response = self.client.post(BASE_URL, data=new_customer.serialize())
+        self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+        data = response.get_json()
+        self.assertIn("Content-Type must be application/json", data["message"])
+
+
+
+    def test_update_customer_no_content_type(self):
+        """It should return 415 if 'Content-Type' is not specified in headers"""
+        # First create a new customer
+        new_customer = self._create_customers(1)[0]
+        # Update customer data
+        new_customer.name = "Updated name"
+        # Make a PUT request without setting 'Content-Type' in headers
+        headers = {"Content-Type": None}  # Explicitly set to None
+        response = self.client.put(
+            f"{BASE_URL}/{new_customer.id}", 
+            data=new_customer.serialize(),
+            headers=headers
+        )
+        self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+        data = response.get_json()
+        self.assertIn("Content-Type must be application/json", data["message"])
+
