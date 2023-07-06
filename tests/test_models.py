@@ -115,7 +115,7 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(customer.phone_number, "123456")
         self.assertEqual(customer.email, "c1@gmail.com")
         self.assertEqual(customer.password, "c1")
-
+    
 
     def test_read_a_customer(self):
         """It should Read a Customer"""
@@ -133,6 +133,17 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(found_customer.password, customer.password)
         self.assertEqual(found_customer.email, customer.email)
 
+    def test_list_all_customers(self):
+        """It should List all Customers in the database"""
+        customers = Customer.all()
+        self.assertEqual(customers, [])
+        # Create 5 Customers
+        for _ in range(5):
+            customer = CustomerFactory()
+            customer.create()
+        # See if we get back 5 customers
+        customers = Customer.all()
+        self.assertEqual(len(customers), 5)
 
     def test_update_a_customer(self):
         """It should Update a Customer"""

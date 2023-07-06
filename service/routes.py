@@ -108,6 +108,30 @@ def delete_customers(id):
         customer.delete()
     return make_response("",status.HTTP_204_NO_CONTENT)
 
+
+######################################################################
+# list a customer # 
+######################################################################
+
+@app.route("/customers", methods=["GET"])
+def list_customers():
+    """Returns all of the Customers"""
+    app.logger.info("Request for customer list")
+    customers = []
+    id = request.args.get("id")
+    name = request.args.get("name")
+    if id:
+        customers = Customer.find_by_id(id)
+    elif name:
+        customers = Customer.find_by_name(name)
+    else:
+        customers = Customer.all()
+
+    results = [customer.serialize() for customer in customers]
+    app.logger.info("Returning %d customers", len(results))
+    return jsonify(results), status.HTTP_200_OK
+
+
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S
 ######################################################################

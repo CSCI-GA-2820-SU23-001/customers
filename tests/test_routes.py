@@ -88,6 +88,24 @@ class TestYourResourceServer(TestCase):
         data = response.get_json()
         self.assertEqual(data["name"], test_customer.name)
 
+    def test_get_customer_list(self):
+        """It should Get a list of Customers"""
+
+        customers = CustomerFactory.create_batch(5)
+
+        for customer in customers:
+            customer.create()
+
+        cust_get_req = self.client.get(BASE_URL)
+
+        # Assert that the customer list is populated
+        self.assertEqual(
+            cust_get_req.status_code,
+            status.HTTP_200_OK,
+            "Customer list is populated successfully")
+        data = cust_get_req.get_json()
+        self.assertEqual(len(data), 5)
+        
     def test_get_customer_not_found(self):
         """It should not Get a customer thats not found"""
         response = self.client.get(f"{BASE_URL}/0")
@@ -160,8 +178,7 @@ class TestYourResourceServer(TestCase):
         data = response.get_json()
         self.assertIn("Content-Type must be application/json", data["message"])
 
-
-
+    
     def test_update_customer_no_content_type(self):
         """It should return 415 if 'Content-Type' is not specified in headers when updating customers"""
         # First create a new customer
