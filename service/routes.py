@@ -4,7 +4,7 @@ My Service
 Describe what your service does here
 """
 
-from flask import Flask, jsonify, request, url_for, make_response, abort
+from flask import jsonify, request, url_for, make_response, abort
 from service.common import status  # HTTP Status Codes
 from service.models import Customer
 
@@ -27,6 +27,7 @@ def index():
 #  R E S T   A P I   E N D P O I N T S
 ######################################################################
 
+
 ######################################################################
 # RETRIEVE A CUSTOMER
 ######################################################################
@@ -34,7 +35,6 @@ def index():
 def get_customers(id):
     """
     Retrieve a single Customer
-
     This endpoint will return a Customer based on it's id
     """
     app.logger.info("Request for customer with id: %s", id)
@@ -79,7 +79,7 @@ def update_customers(id):
     """
     app.logger.info("Request to update customer with id: %s", id)
     check_content_type("application/json")
-    
+
     customer = Customer.find(id)
     if not customer:
         abort(status.HTTP_404_NOT_FOUND, f"Customer with id '{id}' was not found.")
@@ -89,7 +89,6 @@ def update_customers(id):
     message = customer.serialize()
     app.logger.info("Customer with ID [%s] updated.", customer.id)
     return jsonify(message), status.HTTP_200_OK
-
 
 
 ######################################################################
@@ -106,13 +105,15 @@ def delete_customers(id):
     customer = customer.find(id)
     if customer:
         customer.delete()
-    return make_response("",status.HTTP_204_NO_CONTENT)
+    return make_response("", status.HTTP_204_NO_CONTENT)
 
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S
 ######################################################################
 def check_content_type(content_type):
-    """ Checks that the media type is correct """
+    """
+    Checks that the media type is correct
+    """
     if "Content-Type" not in request.headers:
         app.logger.error("No Content-Type specified.")
         abort(

@@ -31,12 +31,12 @@ class Customer(db.Model):
 
     # Table Schema
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(63), nullable = False)
-    address = db.Column(db.String(256), nullable = False)
-    email = db.Column(db.String(63),nullable = False)
-    password = db.Column(db.String(20), nullable = False)
+    name = db.Column(db.String(63), nullable=False)
+    address = db.Column(db.String(256), nullable=False)
+    email = db.Column(db.String(63), nullable=False)
+    password = db.Column(db.String(20), nullable=False)
     phone_number = db.Column(db.String(63))
-    
+
     def __repr__(self):
         return f"<Customer {self.name} id=[{self.id}]>"
 
@@ -65,13 +65,13 @@ class Customer(db.Model):
     def serialize(self):
         """ Serializes a Customer into a dictionary """
         return {
-        "id": self.id,
-        "name": self.name,
-        "address": self.address,
-        "email": self.email,
-        "phone_number": self.phone_number,
-        "password": self.password
-         }
+            "id": self.id,
+            "name": self.name,
+            "address": self.address,
+            "email": self.email,
+            "phone_number": self.phone_number,
+            "password": self.password
+        }
 
     def deserialize(self, data):
         """
