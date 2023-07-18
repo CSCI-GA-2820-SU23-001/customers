@@ -61,7 +61,6 @@ class TestCustomer(unittest.TestCase):
         for customer in same_name_customers:
             self.assertEqual(customer.name, "test name")
 
-
     @classmethod
     def setUpClass(cls):
         """ This runs once before the entire test suite """
@@ -105,7 +104,7 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(customer.phone_number, "123456")
         self.assertEqual(customer.email, "c1@gmail.com")
         self.assertEqual(customer.password, "c1")
-    
+
     def test_read_a_customer(self):
         """It should Read a Customer"""
         customer = CustomerFactory()
@@ -186,7 +185,6 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(customer.email, data["email"])
         self.assertEqual(customer.phone_number, data["phone_number"])
 
-    
     def test_delete_customer(self):
         """It should delete a customer"""
         customer = CustomerFactory()

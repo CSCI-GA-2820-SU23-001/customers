@@ -76,7 +76,7 @@ class TestYourResourceServer(TestCase):
         """It should not Create a Customer with missing data"""
         response = self.client.post(BASE_URL, json={})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        
+
     def test_get_customer(self):
         """It should Get a single customer"""
         # get the name of a customer
@@ -103,7 +103,7 @@ class TestYourResourceServer(TestCase):
             "Customer list is populated successfully")
         data = cust_get_req.get_json()
         self.assertEqual(len(data), 5)
-        
+
     def test_get_customer_not_found(self):
         """It should not Get a customer thats not found"""
         response = self.client.get(f"{BASE_URL}/0")
@@ -125,8 +125,8 @@ class TestYourResourceServer(TestCase):
         customer_id = data["id"]
 
         test_customer.name = "new"
-        response = self.client.put(f"{BASE_URL}/{customer_id}", 
-                                   json=test_customer.serialize(), 
+        response = self.client.put(f"{BASE_URL}/{customer_id}",
+                                   json=test_customer.serialize(),
                                    content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -171,10 +171,9 @@ class TestYourResourceServer(TestCase):
         data = response.get_json()
         self.assertIn("was not found", data["message"])
 
-
     def test_create_customer_no_content_type(self):
         """
-        It should return 415 if 'Content-Type' is not specified 
+        It should return 415 if 'Content-Type' is not specified
         in headers when creating customers
         """
         new_customer = CustomerFactory()
@@ -183,12 +182,10 @@ class TestYourResourceServer(TestCase):
         data = response.get_json()
         self.assertIn("Content-Type must be application/json", data["message"])
 
-    
     def test_update_customer_no_content_type(self):
         """It should return 415 if 'Content-Type' is not 
         specified in headers when updating customers
         """
-
         # First create a new customer
         new_customer = self._create_customers(1)[0]
         # Update customer data
