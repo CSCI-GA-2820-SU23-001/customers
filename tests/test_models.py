@@ -88,7 +88,6 @@ class TestCustomer(unittest.TestCase):
     #  T E S T   C A S E S
     ######################################################################
 
-
     def test_create_a_customer(self):
         """It should Create a Customer"""
         customer = Customer(name="c1", id=1,
