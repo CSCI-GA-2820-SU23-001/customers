@@ -183,7 +183,7 @@ class TestYourResourceServer(TestCase):
         self.assertIn("Content-Type must be application/json", data["message"])
 
     def test_update_customer_no_content_type(self):
-        """It should return 415 if 'Content-Type' is not 
+        """It should return 415 if 'Content-Type' is not
         specified in headers when updating customers
         """
         # First create a new customer
@@ -193,8 +193,8 @@ class TestYourResourceServer(TestCase):
         # Make a PUT request without setting 'Content-Type' in headers
         headers = {"Content-Type": None}  # Explicitly set to None
         response = self.client.put(
-            f"{BASE_URL}/{new_customer.id}",  
-            data=new_customer.serialize(), 
+            f"{BASE_URL}/{new_customer.id}",
+            data=new_customer.serialize(),
             headers=headers
         )
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
