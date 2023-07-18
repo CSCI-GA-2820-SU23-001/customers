@@ -117,10 +117,10 @@ def list_customers():
     """Returns all of the Customers"""
     app.logger.info("Request for customer list")
     customers = []
-    id = request.args.get("id")
+    customer_id = request.args.get("id")
     name = request.args.get("name")
-    if id:
-        customers = Customer.find_by_id(id)
+    if customer_id:
+        customers = Customer.find_by_id(customer_id)
     elif name:
         customers = Customer.find_by_name(name)
     else:
