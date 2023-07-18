@@ -64,11 +64,9 @@ class TestYourResourceServer(TestCase):
             customers.append(test_customer)
         return customers
 
-
     ######################################################################
     #  P L A C E   T E S T   C A S E S   H E R E
     ######################################################################
-
     def test_index(self):
         """ It should call the home page """
         resp = self.client.get("/")
@@ -117,8 +115,8 @@ class TestYourResourceServer(TestCase):
     def test_update_customers(self):
         """ Factory method to create customers in bulk """
         test_customer = self._create_customers(1)[0]
-        response = self.client.post(f"{BASE_URL}", 
-                                    json=test_customer.serialize(), 
+        response = self.client.post(f"{BASE_URL}",
+                                    json=test_customer.serialize(),
                                     content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -133,7 +131,7 @@ class TestYourResourceServer(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         data = response.get_json()
-        self.assertEqual(data["id"],customer_id)
+        self.assertEqual(data["id"], customer_id)
         self.assertEqual(data["name"], "new")
         self.assertEqual(data["address"], test_customer.address)
         self.assertEqual(data["email"], test_customer.email)
@@ -165,8 +163,8 @@ class TestYourResourceServer(TestCase):
         """It should not Update a customer that's not found"""
         test_customer = CustomerFactory()
         response = self.client.put(
-            f"{BASE_URL}/0", 
-            json=test_customer.serialize(), 
+            f"{BASE_URL}/0",
+            json=test_customer.serialize(),
             content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

@@ -23,7 +23,7 @@ class TestCustomer(unittest.TestCase):
     def test_repr(self):
         """It should provide a string representation of a Customer"""
         customer = Customer(name="c1", id=1, address="address1", phone_number="123456", email="c1@gmail.com", password="c1")
-        self.assertEqual(repr(customer), f"<Customer c1 id=[1]>")
+        self.assertEqual(repr(customer), "<Customer c1 id=[1]>")
 
     def test_deserialize_key_error(self):
         """It should raise a DataValidationError when a key is missing during deserialization"""
@@ -37,7 +37,6 @@ class TestCustomer(unittest.TestCase):
         else:
             self.fail("KeyError not raised")
 
-
     def test_deserialize_type_error(self):
         """It should raise a DataValidationError when a bad type is provided during deserialization"""
         data = ["Not a dictionary"]  # not a dictionary
@@ -49,19 +48,15 @@ class TestCustomer(unittest.TestCase):
         else:
             self.fail("TypeError not raised")
 
-
     def test_find_by_name(self):
         """It should find Customers by their name"""
         customers = [CustomerFactory(name="test name") for _ in range(3)]
         for customer in customers:
             customer.create()
-
         # make sure they got saved
         self.assertEqual(len(Customer.all()), 3)
-
         # find them by name
         same_name_customers = Customer.find_by_name("test name")
-
         self.assertEqual(len(same_name_customers), 3)
         for customer in same_name_customers:
             self.assertEqual(customer.name, "test name")
@@ -98,11 +93,10 @@ class TestCustomer(unittest.TestCase):
         """ It should always be true """
         self.assertTrue(True)
 
-
     def test_create_a_customer(self):
         """It should Create a Customer"""
-        customer = Customer(name="c1", id=1, 
-                            address="address1", phone_number="123456", 
+        customer = Customer(name="c1", id=1,
+                            address="address1", phone_number="123456",
                             email="c1@gmail.com", password="c1")
         self.assertTrue(customer is not None)
         self.assertEqual(customer.id, 1)
@@ -112,7 +106,6 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(customer.email, "c1@gmail.com")
         self.assertEqual(customer.password, "c1")
     
-
     def test_read_a_customer(self):
         """It should Read a Customer"""
         customer = CustomerFactory()
@@ -162,7 +155,6 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(customers[0].id, original_id)
         self.assertEqual(customers[0].name, "customer2")
 
-
     def test_serialize_a_customer(self):
         """It should serialize a Customer"""
         customer = CustomerFactory()
@@ -180,7 +172,6 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(data["address"], customer.address)
         self.assertIn("email", data)
         self.assertEqual(data["email"], customer.email)
-
 
     def test_deserialize_a_customer(self):
         """It should de-serialize a Customer"""
