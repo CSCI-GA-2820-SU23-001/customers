@@ -183,7 +183,7 @@ class TestYourResourceServer(TestCase):
         self.assertIn("Content-Type must be application/json", data["message"])
 
     def test_update_customer_no_content_type(self):
-        """It should return 415 if 'Content-Type' is not
+        """It should return 415 if 'Content-Type' is not 
         specified in headers when updating customers
         """
         # First create a new customer

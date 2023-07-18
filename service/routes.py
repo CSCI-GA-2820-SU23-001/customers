@@ -31,13 +31,13 @@ def index():
 ######################################################################
 # RETRIEVE A CUSTOMER
 ######################################################################
-@app.route("/customers/<int:id>", methods=["GET"])
+@app.route("/customers/<int:customer_id>", methods=["GET"])
 def get_customers(customer_id):
     """
     Retrieve a single Customer
     This endpoint will return a Customer based on it's id
     """
-    app.logger.info("Request for customer with id: %s", id)
+    app.logger.info("Request for customer with id: %s", customer_id)
     customer = Customer.find(customer_id)
     if not customer:
         abort(status.HTTP_404_NOT_FOUND, f"Customer with id '{customer_id}' was not found.")
@@ -71,13 +71,13 @@ def create_customers():
 ######################################################################
 # MODIFY A CUSTOMER
 ######################################################################
-@app.route("/customers/<int:id>", methods=["PUT"])
+@app.route("/customers/<int:customer_id>", methods=["PUT"])
 def update_customers(customer_id):
     """
     Update a customer
     This endpoint will return a Customer based on it's id
     """
-    app.logger.info("Request to update customer with id: %s", id)
+    app.logger.info("Request to update customer with id: %s", customer_id)
     check_content_type("application/json")
 
     customer = Customer.find(customer_id)
@@ -94,14 +94,14 @@ def update_customers(customer_id):
 ######################################################################
 # DELETE A CUSTOMER
 ######################################################################
-@app.route("/customers/<int:id>", methods=["DELETE"])
+@app.route("/customers/<int:customer_id>", methods=["DELETE"])
 def delete_customers(customer_id):
     """
     Delete a customer
     This endpoint will delete a customer based the id in the path
     """
     customer = Customer()
-    app.logger.info("Request to delete a customer with id: %s", id)
+    app.logger.info("Request to delete a customer with id: %s", customer_id)
     customer = customer.find(customer_id)
     if customer:
         customer.delete()
@@ -117,7 +117,7 @@ def list_customers():
     """Returns all of the Customers"""
     app.logger.info("Request for customer list")
     customers = []
-    customer_id = request.args.get("id")
+    customer_id = request.args.get("customer_id")
     name = request.args.get("name")
     if customer_id:
         customers = Customer.find_by_id(customer_id)

@@ -88,6 +88,7 @@ class TestCustomer(unittest.TestCase):
     #  T E S T   C A S E S
     ######################################################################
 
+
     def test_create_a_customer(self):
         """It should Create a Customer"""
         customer = Customer(name="c1", id=1,
@@ -139,15 +140,15 @@ class TestCustomer(unittest.TestCase):
         self.assertIsNotNone(customer.id)
         # Change it an save it
         customer.name = "customer2"
-        original_id = customer.id
+        original_customer_id = customer.id
         customer.update()
-        self.assertEqual(customer.id, original_id)
+        self.assertEqual(customer.id, original_customer_id)
         self.assertEqual(customer.name, "customer2")
         # Fetch it back and make sure the id hasn't changed
         # but the data did change
         customers = Customer.all()
         self.assertEqual(len(customers), 1)
-        self.assertEqual(customers[0].id, original_id)
+        self.assertEqual(customers[0].id, original_customer_id)
         self.assertEqual(customers[0].name, "customer2")
 
     def test_serialize_a_customer(self):
