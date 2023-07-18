@@ -32,8 +32,8 @@ class TestCustomer(unittest.TestCase):
         del data['name']  # remove a key to trigger KeyError
         try:
             customer.deserialize(data)
-        except DataValidationError as e:
-            self.assertEqual(str(e), "Invalid Customer: missing name")
+        except DataValidationError as error:
+            self.assertEqual(str(error), "Invalid Customer: missing name")
         else:
             self.fail("KeyError not raised")
 
@@ -43,8 +43,8 @@ class TestCustomer(unittest.TestCase):
         customer = Customer()
         try:
             customer.deserialize(data)
-        except DataValidationError as e:
-            self.assertTrue("Invalid Customer: body of request contained bad or no data" in str(e))
+        except DataValidationError as error:
+            self.assertTrue("Invalid Customer: body of request contained bad or no data" in str(error))
         else:
             self.fail("TypeError not raised")
 
@@ -87,10 +87,6 @@ class TestCustomer(unittest.TestCase):
     ######################################################################
     #  T E S T   C A S E S
     ######################################################################
-
-    def test_example_replace_this(self):
-        """ It should always be true """
-        self.assertTrue(True)
 
     def test_create_a_customer(self):
         """It should Create a Customer"""

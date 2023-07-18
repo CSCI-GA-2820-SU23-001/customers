@@ -1,10 +1,19 @@
+"""
+Test initialization of the database
+
+"""
+
 from unittest.mock import patch
-from service import models, app
-import logging
 from unittest import TestCase
+import logging
+from service import models, app
 
 
+######################################################################
+#  Customer   M O D E L   I N I T   T E S T
+######################################################################
 class TestDBInit(TestCase):
+    """ Test Cases for Customer Model Initialization"""
     @patch.object(models, 'init_db')
     @patch.object(app.logger, 'critical')
     def test_db_init_error(self, mock_critical, mock_init_db):

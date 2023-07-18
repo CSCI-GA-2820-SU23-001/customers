@@ -32,15 +32,15 @@ def index():
 # RETRIEVE A CUSTOMER
 ######################################################################
 @app.route("/customers/<int:id>", methods=["GET"])
-def get_customers(id):
+def get_customers(customer_id):
     """
     Retrieve a single Customer
     This endpoint will return a Customer based on it's id
     """
     app.logger.info("Request for customer with id: %s", id)
-    customer = Customer.find(id)
+    customer = Customer.find(customer_id)
     if not customer:
-        abort(status.HTTP_404_NOT_FOUND, f"Customer with id '{id}' was not found.")
+        abort(status.HTTP_404_NOT_FOUND, f"Customer with id '{customer_id}' was not found.")
 
     app.logger.info("Returning customer: %s", customer.name)
     return jsonify(customer.serialize()), status.HTTP_200_OK
@@ -72,7 +72,7 @@ def create_customers():
 # MODIFY A CUSTOMER
 ######################################################################
 @app.route("/customers/<int:id>", methods=["PUT"])
-def update_customers(id):
+def update_customers(customer_id):
     """
     Update a customer
     This endpoint will return a Customer based on it's id
@@ -80,11 +80,11 @@ def update_customers(id):
     app.logger.info("Request to update customer with id: %s", id)
     check_content_type("application/json")
 
-    customer = Customer.find(id)
+    customer = Customer.find(customer_id)
     if not customer:
-        abort(status.HTTP_404_NOT_FOUND, f"Customer with id '{id}' was not found.")
+        abort(status.HTTP_404_NOT_FOUND, f"Customer with id '{customer_id}' was not found.")
     customer.deserialize(request.get_json())
-    customer.id = id
+    customer.id = customer_id
     customer.update()
     message = customer.serialize()
     app.logger.info("Customer with ID [%s] updated.", customer.id)
@@ -95,14 +95,14 @@ def update_customers(id):
 # DELETE A CUSTOMER
 ######################################################################
 @app.route("/customers/<int:id>", methods=["DELETE"])
-def delete_customers(id):
+def delete_customers(customer_id):
     """
     Delete a customer
     This endpoint will delete a customer based the id in the path
     """
     customer = Customer()
     app.logger.info("Request to delete a customer with id: %s", id)
-    customer = customer.find(id)
+    customer = customer.find(customer_id)
     if customer:
         customer.delete()
     return make_response("", status.HTTP_204_NO_CONTENT)
