@@ -33,16 +33,16 @@ def index():
 ######################################################################
 # RETRIEVE A CUSTOMER
 ######################################################################
-@app.route("/customers/<int:id>", methods=["GET"])
-def get_customers(id):
+@app.route("/customers/<int:customer_id>", methods=["GET"])
+def get_customers(customer_id):
     """
     Retrieve a single Customer
     This endpoint will return a Customer based on it's id
     """
-    app.logger.info("Request for customer with id: %s", id)
-    customer = Customer.find(id)
+    app.logger.info("Request for customer with id: %s", customer_id)
+    customer = Customer.find(customer_id)
     if not customer:
-        abort(status.HTTP_404_NOT_FOUND, f"Customer with id '{id}' was not found.")
+        abort(status.HTTP_404_NOT_FOUND, f"Customer with id '{customer_id}' was not found.")
 
     app.logger.info("Returning customer: %s", customer.name)
     return jsonify(customer.serialize()), status.HTTP_200_OK
@@ -73,20 +73,20 @@ def create_customers():
 ######################################################################
 # MODIFY A CUSTOMER
 ######################################################################
-@app.route("/customers/<int:id>", methods=["PUT"])
-def update_customers(id):
+@app.route("/customers/<int:customer_id>", methods=["PUT"])
+def update_customers(customer_id):
     """
     Update a customer
     This endpoint will return a Customer based on it's id
     """
-    app.logger.info("Request to update customer with id: %s", id)
+    app.logger.info("Request to update customer with id: %s", customer_id)
     check_content_type("application/json")
 
-    customer = Customer.find(id)
+    customer = Customer.find(customer_id)
     if not customer:
-        abort(status.HTTP_404_NOT_FOUND, f"Customer with id '{id}' was not found.")
+        abort(status.HTTP_404_NOT_FOUND, f"Customer with id '{customer_id}' was not found.")
     customer.deserialize(request.get_json())
-    customer.id = id
+    customer.id = customer_id
     customer.update()
     message = customer.serialize()
     app.logger.info("Customer with ID [%s] updated.", customer.id)
@@ -96,22 +96,22 @@ def update_customers(id):
 ######################################################################
 # DELETE A CUSTOMER
 ######################################################################
-@app.route("/customers/<int:id>", methods=["DELETE"])
-def delete_customers(id):
+@app.route("/customers/<int:customer_id>", methods=["DELETE"])
+def delete_customers(customer_id):
     """
     Delete a customer
     This endpoint will delete a customer based the id in the path
     """
     customer = Customer()
-    app.logger.info("Request to delete a customer with id: %s", id)
-    customer = customer.find(id)
+    app.logger.info("Request to delete a customer with id: %s", customer_id)
+    customer = customer.find(customer_id)
     if customer:
         customer.delete()
     return make_response("", status.HTTP_204_NO_CONTENT)
 
 
 ######################################################################
-# list a customer # 
+# list a customer #
 ######################################################################
 
 @app.route("/customers", methods=["GET"])
@@ -119,10 +119,10 @@ def list_customers():
     """Returns all of the Customers"""
     app.logger.info("Request for customer list")
     customers = []
-    id = request.args.get("id")
+    customer_id = request.args.get("customer_id")
     name = request.args.get("name")
-    if id:
-        customers = Customer.find_by_id(id)
+    if customer_id:
+        customers = Customer.find_by_id(customer_id)
     elif name:
         customers = Customer.find_by_name(name)
     else:

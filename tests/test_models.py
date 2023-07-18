@@ -23,7 +23,7 @@ class TestCustomer(unittest.TestCase):
     def test_repr(self):
         """It should provide a string representation of a Customer"""
         customer = Customer(name="c1", id=1, address="address1", phone_number="123456", email="c1@gmail.com", password="c1")
-        self.assertEqual(repr(customer), f"<Customer c1 id=[1]>")
+        self.assertEqual(repr(customer), "<Customer c1 id=[1]>")
 
     def test_deserialize_key_error(self):
         """It should raise a DataValidationError when a key is missing during deserialization"""
@@ -32,11 +32,10 @@ class TestCustomer(unittest.TestCase):
         del data['name']  # remove a key to trigger KeyError
         try:
             customer.deserialize(data)
-        except DataValidationError as e:
-            self.assertEqual(str(e), "Invalid Customer: missing name")
+        except DataValidationError as error:
+            self.assertEqual(str(error), "Invalid Customer: missing name")
         else:
             self.fail("KeyError not raised")
-
 
     def test_deserialize_type_error(self):
         """It should raise a DataValidationError when a bad type is provided during deserialization"""
@@ -44,28 +43,23 @@ class TestCustomer(unittest.TestCase):
         customer = Customer()
         try:
             customer.deserialize(data)
-        except DataValidationError as e:
-            self.assertTrue("Invalid Customer: body of request contained bad or no data" in str(e))
+        except DataValidationError as error:
+            self.assertTrue("Invalid Customer: body of request contained bad or no data" in str(error))
         else:
             self.fail("TypeError not raised")
-
 
     def test_find_by_name(self):
         """It should find Customers by their name"""
         customers = [CustomerFactory(name="test name") for _ in range(3)]
         for customer in customers:
             customer.create()
-
         # make sure they got saved
         self.assertEqual(len(Customer.all()), 3)
-
         # find them by name
         same_name_customers = Customer.find_by_name("test name")
-
         self.assertEqual(len(same_name_customers), 3)
         for customer in same_name_customers:
             self.assertEqual(customer.name, "test name")
-
 
     @classmethod
     def setUpClass(cls):
@@ -94,15 +88,10 @@ class TestCustomer(unittest.TestCase):
     #  T E S T   C A S E S
     ######################################################################
 
-    def test_example_replace_this(self):
-        """ It should always be true """
-        self.assertTrue(True)
-
-
     def test_create_a_customer(self):
         """It should Create a Customer"""
-        customer = Customer(name="c1", id=1, 
-                            address="address1", phone_number="123456", 
+        customer = Customer(name="c1", id=1,
+                            address="address1", phone_number="123456",
                             email="c1@gmail.com", password="c1")
         self.assertTrue(customer is not None)
         self.assertEqual(customer.id, 1)
@@ -111,7 +100,6 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(customer.phone_number, "123456")
         self.assertEqual(customer.email, "c1@gmail.com")
         self.assertEqual(customer.password, "c1")
-    
 
     def test_read_a_customer(self):
         """It should Read a Customer"""
@@ -151,17 +139,16 @@ class TestCustomer(unittest.TestCase):
         self.assertIsNotNone(customer.id)
         # Change it an save it
         customer.name = "customer2"
-        original_id = customer.id
+        original_customer_id = customer.id
         customer.update()
-        self.assertEqual(customer.id, original_id)
+        self.assertEqual(customer.id, original_customer_id)
         self.assertEqual(customer.name, "customer2")
         # Fetch it back and make sure the id hasn't changed
         # but the data did change
         customers = Customer.all()
         self.assertEqual(len(customers), 1)
-        self.assertEqual(customers[0].id, original_id)
+        self.assertEqual(customers[0].id, original_customer_id)
         self.assertEqual(customers[0].name, "customer2")
-
 
     def test_serialize_a_customer(self):
         """It should serialize a Customer"""
@@ -181,7 +168,6 @@ class TestCustomer(unittest.TestCase):
         self.assertIn("email", data)
         self.assertEqual(data["email"], customer.email)
 
-
     def test_deserialize_a_customer(self):
         """It should de-serialize a Customer"""
         data = CustomerFactory().serialize()
@@ -195,7 +181,6 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(customer.email, data["email"])
         self.assertEqual(customer.phone_number, data["phone_number"])
 
-    
     def test_delete_customer(self):
         """It should delete a customer"""
         customer = CustomerFactory()
