@@ -1,7 +1,7 @@
 # These can be overidden with env vars.
 CLUSTER ?= customer-cluster
 REGISTRY ?= us.icr.io
-NAMESPACE ?= nikhil
+NAMESPACE ?= nikhilyadav
 IMAGE_NAME ?= customers
 IMAGE_TAG ?= 1.0
 IMAGE ?= $(REGISTRY)/$(NAMESPACE)/$(IMAGE_NAME):$(IMAGE_TAG)
@@ -48,6 +48,15 @@ run: ## Run the service
 	$(info Starting service...)
 	honcho start
 
+
+
+.PHONY: namespace
+namespace: ## Create the namespace assigned to the SPACE env variable
+	$(info Creatng the $(SPACE) namespace...)
+	kubectl create namespace $(SPACE) 
+	kubectl get secret all-icr-io -n default -o yaml | sed 's/default/$(SPACE)/g' | kubectl create -n $(SPACE) -f -
+	kubectl config set-context --current --namespace $(SPACE)
+
 .PHONY: cluster
 cluster: ## Create a K3D Kubernetes cluster with load balancer and registry
 	$(info Creating Kubernetes cluster with a registry and 1 node...)
@@ -61,7 +70,7 @@ cluster-rm: ## Remove a K3D Kubernetes cluster
 .PHONY: login
 login: ## Login to IBM Cloud using yur api key
 	$(info Logging into IBM Cloud cluster $(CLUSTER)...)
-	ibmcloud login -a cloud.ibm.com -g Default -r us-south --apikey @~/apikey.json
+	ibmcloud login -a cloud.ibm.com -g Default -r us-south --apikey @~/.bluemix/apikey.json
 	ibmcloud cr login
 	ibmcloud ks cluster config --cluster $(CLUSTER)
 	ibmcloud ks workers --cluster $(CLUSTER)
