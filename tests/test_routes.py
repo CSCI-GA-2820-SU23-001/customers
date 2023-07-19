@@ -201,16 +201,16 @@ class TestYourResourceServer(TestCase):
         data = response.get_json()
         self.assertIn("Content-Type must be application/json", data["message"])
 
-    def test_method_not_supported(self):
-        """It should assert a method that not allowed error"""
-        customer = CustomerFactory.create()
-        customer.name = 'Valentina'
-        response = self.client.patch(f'{BASE_URL}/{customer.id}', json=customer.serialize())
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
     def test_health(self):
         """It should get the health endpoint"""
         resp = self.client.get("/health")
         self.assertEqual(resp.status_code, 200)
         data = resp.get_json()
         self.assertEqual(data["status"], "OK")
+
+    def test_method_not_supported(self):
+        """It should assert a method that not allowed error"""
+        customer = CustomerFactory.create()
+        customer.name = 'Valentina'
+        response = self.client.patch(f'{BASE_URL}/{customer.id}', json=customer.serialize())
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
