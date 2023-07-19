@@ -112,6 +112,13 @@ class TestYourResourceServer(TestCase):
         logging.debug("Response data = %s", data)
         self.assertIn("was not found", data["message"])
 
+    def test_health(self):
+        """It should get the health endpoint"""
+        resp = self.client.get("/health")
+        self.assertEqual(resp.status_code, 200)
+        data = resp.get_json()
+        self.assertEqual(data["status"], "OK")
+
     def test_update_customers(self):
         """ Factory method to create customers in bulk """
         test_customer = self._create_customers(1)[0]
@@ -200,13 +207,6 @@ class TestYourResourceServer(TestCase):
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
         data = response.get_json()
         self.assertIn("Content-Type must be application/json", data["message"])
-
-    def test_health(self):
-        """It should get the health endpoint"""
-        resp = self.client.get("/health")
-        self.assertEqual(resp.status_code, 200)
-        data = resp.get_json()
-        self.assertEqual(data["status"], "OK")
 
     def test_method_not_supported(self):
         """It should assert a method that not allowed error"""
