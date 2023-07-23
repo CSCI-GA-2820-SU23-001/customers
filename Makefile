@@ -1,9 +1,9 @@
 # These can be overidden with env vars.
 CLUSTER ?= customer-cluster
 REGISTRY ?= us.icr.io
-NAMESPACE ?= nikhilyadav
+NAMESPACE ?= nikhilbyadav
 IMAGE_NAME ?= customers
-IMAGE_TAG ?= 1.0
+IMAGE_TAG ?= 1.1
 IMAGE ?= $(REGISTRY)/$(NAMESPACE)/$(IMAGE_NAME):$(IMAGE_TAG)
 # PLATFORM ?= "linux/amd64,linux/arm64"
 PLATFORM ?= "linux/amd64"
