@@ -18,12 +18,7 @@ from . import app
 @app.route("/")
 def index():
     """Root URL response"""
-    info = {
-        "name": "Customer Service",
-        "version": "1.0.0",
-        "List resource URL": url_for("list_customers", _external=True),
-    }
-    return jsonify(info), status.HTTP_200_OK
+    return app.send_static_file("index.html")
 
 
 ######################################################################
@@ -128,11 +123,18 @@ def list_customers():
     app.logger.info("Request for customer list")
     customers = []
     customer_id = request.args.get("customer_id")
+    phone = request.args.get("phone_number")
     name = request.args.get("name")
+    available = request.args.get("available")
+
     if customer_id:
         customers = Customer.find_by_id(customer_id)
+    elif phone:
+        customers = Customer.find_by_phone(phone)
     elif name:
         customers = Customer.find_by_name(name)
+    elif available:
+        customers = Customer.find_by_availability(available)
     else:
         customers = Customer.all()
 

@@ -131,3 +131,27 @@ class Customer(db.Model):
         """
         logger.info("Processing name query for %s ...", name)
         return cls.query.filter(cls.name == name).all()
+
+    @classmethod
+    def find_by_availability(cls, available: bool = True) -> list:
+        """Returns all Pets by their availability
+
+        :param available: True for Customers that are available
+        :type available: str
+
+        :return: a collection of Pets that are available
+        :rtype: list
+
+        """
+        logger.info("Processing available query for %s ...", available)
+        return cls.query.filter(cls.available == available)
+    
+    @classmethod
+    def find_by_phone(cls, phone):
+        """Returns all Customers with the given name
+
+        Args:
+            name (string): the name of the Customers you want to match
+        """
+        logger.info("Processing phone number query for %s ...", phone)
+        return cls.query.filter(cls.phone_number == phone).all()

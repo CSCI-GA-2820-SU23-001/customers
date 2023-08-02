@@ -27,6 +27,10 @@
         "**/.DS_Store": true,
         "**/*.pyc": true,
         "**/__pycache__": true
-    }
+    },
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.python"
+    },
+    "python.formatting.provider": "none"
 }
 
