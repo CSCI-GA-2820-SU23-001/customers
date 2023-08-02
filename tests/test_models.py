@@ -18,18 +18,33 @@ DATABASE_URI = os.getenv(
 #  Customer   M O D E L   T E S T   C A S E S
 ######################################################################
 class TestCustomer(unittest.TestCase):
-    """ Test Cases for Customer Model """
+    """Test Cases for Customer Model"""
 
     def test_repr(self):
         """It should provide a string representation of a Customer"""
-        customer = Customer(name="c1", id=1, address="address1", phone_number="123456", email="c1@gmail.com", password="c1")
+        customer = Customer(
+            name="c1",
+            id=1,
+            address="address1",
+            phone_number="123456",
+            email="c1@gmail.com",
+            password="c1",
+            available=True,
+        )
         self.assertEqual(repr(customer), "<Customer c1 id=[1]>")
 
     def test_deserialize_key_error(self):
         """It should raise a DataValidationError when a key is missing during deserialization"""
-        data = {"name": "c1", "address": "address1", "phone_number": "123456", "email": "c1@gmail.com", "password": "c1"}
+        data = {
+            "name": "c1",
+            "address": "address1",
+            "phone_number": "123456",
+            "email": "c1@gmail.com",
+            "password": "c1",
+            "available": "True",
+        }
         customer = Customer()
-        del data['name']  # remove a key to trigger KeyError
+        del data["name"]  # remove a key to trigger KeyError
         try:
             customer.deserialize(data)
         except DataValidationError as error:
@@ -44,7 +59,10 @@ class TestCustomer(unittest.TestCase):
         try:
             customer.deserialize(data)
         except DataValidationError as error:
-            self.assertTrue("Invalid Customer: body of request contained bad or no data" in str(error))
+            self.assertTrue(
+                "Invalid Customer: body of request contained bad or no data"
+                in str(error)
+            )
         else:
             self.fail("TypeError not raised")
 
@@ -63,7 +81,7 @@ class TestCustomer(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """ This runs once before the entire test suite """
+        """This runs once before the entire test suite"""
         app.config["TESTING"] = True
         app.config["DEBUG"] = False
         app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
@@ -72,16 +90,16 @@ class TestCustomer(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """ This runs once after the entire test suite """
+        """This runs once after the entire test suite"""
         db.session.close()
 
     def setUp(self):
-        """ This runs before each test """
+        """This runs before each test"""
         db.session.query(Customer).delete()  # clean up the last tests
         db.session.commit()
 
     def tearDown(self):
-        """ This runs after each test """
+        """This runs after each test"""
         db.session.remove()
 
     ######################################################################
@@ -90,9 +108,15 @@ class TestCustomer(unittest.TestCase):
 
     def test_create_a_customer(self):
         """It should Create a Customer"""
-        customer = Customer(name="c1", id=1,
-                            address="address1", phone_number="123456",
-                            email="c1@gmail.com", password="c1")
+        customer = Customer(
+            name="c1",
+            id=1,
+            address="address1",
+            phone_number="123456",
+            email="c1@gmail.com",
+            password="c1",
+            available=True,
+        )
         self.assertTrue(customer is not None)
         self.assertEqual(customer.id, 1)
         self.assertEqual(customer.name, "c1")
@@ -100,6 +124,7 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(customer.phone_number, "123456")
         self.assertEqual(customer.email, "c1@gmail.com")
         self.assertEqual(customer.password, "c1")
+        self.assertEqual(customer.available, True)
 
     def test_read_a_customer(self):
         """It should Read a Customer"""
@@ -167,6 +192,8 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(data["address"], customer.address)
         self.assertIn("email", data)
         self.assertEqual(data["email"], customer.email)
+        self.assertIn("available", data)
+        self.assertEqual(data["available"], customer.available)
 
     def test_deserialize_a_customer(self):
         """It should de-serialize a Customer"""
@@ -180,6 +207,7 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(customer.address, data["address"])
         self.assertEqual(customer.email, data["email"])
         self.assertEqual(customer.phone_number, data["phone_number"])
+        self.assertEqual(customer.available, data["available"])
 
     def test_delete_customer(self):
         """It should delete a customer"""

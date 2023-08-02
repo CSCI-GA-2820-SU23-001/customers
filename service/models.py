@@ -14,12 +14,12 @@ db = SQLAlchemy()
 
 # Function to initialize the database
 def init_db(app):
-    """ Initializes the SQLAlchemy app """
+    """Initializes the SQLAlchemy app"""
     Customer.init_db(app)
 
 
 class DataValidationError(Exception):
-    """ Used for an data validation errors when deserializing """
+    """Used for an data validation errors when deserializing"""
 
 
 class Customer(db.Model):
@@ -36,6 +36,7 @@ class Customer(db.Model):
     email = db.Column(db.String(63), nullable=False)
     password = db.Column(db.String(20), nullable=False)
     phone_number = db.Column(db.String(63))
+    available = db.Column(db.Boolean(), nullable=False, default=False)
 
     def __repr__(self):
         return f"<Customer {self.name} id=[{self.id}]>"
@@ -57,20 +58,21 @@ class Customer(db.Model):
         db.session.commit()
 
     def delete(self):
-        """ Removes a Customer from the data store """
+        """Removes a Customer from the data store"""
         logger.info("Deleting %s", self.name)
         db.session.delete(self)
         db.session.commit()
 
     def serialize(self):
-        """ Serializes a Customer into a dictionary """
+        """Serializes a Customer into a dictionary"""
         return {
             "id": self.id,
             "name": self.name,
             "address": self.address,
             "email": self.email,
             "phone_number": self.phone_number,
-            "password": self.password
+            "password": self.password,
+            "available": self.available,
         }
 
     def deserialize(self, data):
@@ -86,6 +88,7 @@ class Customer(db.Model):
             self.email = data["email"]
             self.password = data["password"]
             self.phone_number = data.get("phone_number")
+            self.available = data["available"]
         except KeyError as error:
             raise DataValidationError(
                 "Invalid Customer: missing " + error.args[0]
@@ -99,7 +102,7 @@ class Customer(db.Model):
 
     @classmethod
     def init_db(cls, app):
-        """ Initializes the database session """
+        """Initializes the database session"""
         logger.info("Initializing database")
         cls.app = app
         # This is where we initialize SQLAlchemy from the Flask app
@@ -109,13 +112,13 @@ class Customer(db.Model):
 
     @classmethod
     def all(cls):
-        """ Returns all of the Customers in the database """
+        """Returns all of the Customers in the database"""
         logger.info("Processing all Customers")
         return cls.query.all()
 
     @classmethod
     def find(cls, by_id):
-        """ Finds a Customer by it's ID """
+        """Finds a Customer by it's ID"""
         logger.info("Processing lookup for id %s ...", by_id)
         return cls.query.get(by_id)
 
