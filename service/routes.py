@@ -20,6 +20,7 @@ def index():
     """Root URL response"""
     return app.send_static_file("index.html")
 
+
 ######################################################################
 #  R E S T   A P I   E N D P O I N T S
 ######################################################################
@@ -122,11 +123,18 @@ def list_customers():
     app.logger.info("Request for customer list")
     customers = []
     customer_id = request.args.get("customer_id")
+    phone = request.args.get("phone_number")
     name = request.args.get("name")
+    available = request.args.get("available")
+
     if customer_id:
         customers = Customer.find_by_id(customer_id)
+    elif phone:
+        customers = Customer.find_by_phone(phone)
     elif name:
         customers = Customer.find_by_name(name)
+    elif available:
+        customers = Customer.find_by_availability(available)
     else:
         customers = Customer.all()
 
