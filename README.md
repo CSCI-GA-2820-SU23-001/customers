@@ -31,6 +31,16 @@ These should be copied using a bash shell as follows:
     cp .gitattributes ../<your_repo_folder>/
 ```
 
+## Running the service
+
+The project uses *honcho* which gets it's commands from the `Procfile`. To start the service:
+
+```shell
+$ honcho start
+```
+
+You could reach the service at: http://localhost:8000 as defined in the `.flaskenv` file, which Flask uses to load it's configuration from the environment by default.
+
 ## Customer Service APIs
 
 ### Customer Operations
@@ -65,7 +75,8 @@ Request Body (JSON)
   "address": "5th Fifth Ave, NY",
   "email": "john@gmail.com",
   "phone_number": "12345678",
-  "password": "password"
+  "password": "password",
+  "available": True
 }
 
 
@@ -80,7 +91,8 @@ Success Response : `HTTP_200_CREATED`
     "address": "5th Fifth Ave, NY",
     "email": "john@gmail.com",
     "phone_number": "12345678",
-    "password": "password"
+    "password": "password",
+    "available": True
 }
 ]
 ```
@@ -108,7 +120,8 @@ Success Response : `HTTP_200_OK`
     "address": "5th Fifth Ave, NY",
     "email": "john@gmail.com",
     "phone_number": "12345678",
-    "password": "password"
+    "password": "password",
+    "available": True
 }
 ]
 ```
@@ -145,7 +158,8 @@ Request Body (JSON)
     "address": "5th Fifth Ave, NY",
     "email": "john@gmail.com",
     "phone_number": "12345678",
-    "password": "password"
+    "password": "password",
+    "available": True
 }
 ```
 
@@ -159,7 +173,8 @@ Success Response : `HTTP_200_OK`
     "address": "5th Fifth Ave, NY",
     "email": "john@gmail.com",
     "phone_number": "12345678",
-    "password": "password"
+    "password": "password",
+    "available": True
 }
 ]
 
@@ -218,7 +233,8 @@ Success Response : `HTTP_200_OK`
     "address": "5th Fifth Ave, NY",
     "email": "john@gmail.com",
     "phone_number": "12345678",
-    "password": "password"
+    "password": "password",
+    "available": True
 }
 ]
 ```
@@ -244,46 +260,17 @@ service/                   - service python package
     ├── error_handlers.py  - HTTP error handling code
     ├── log_handlers.py    - logging setup code
     └── status.py          - HTTP status constants
+└── static                 - static code package
+    ├── css                - UI page format
+    ├── images             - UI page mage
+    ├── js                 - UI page constants
+    └── index.html         - UI page alignment
 
 tests/              - test cases package
 ├── __init__.py     - package initializer
 ├── test_models.py  - test suite for business models
 └── test_routes.py  - test suite for service routes
 ```
-
-## Running the service
-
-The project uses *honcho* which gets it's commands from the `Procfile`. To start the service:
-
-```shell
-$ honcho start
-```
-
-You could reach the service at: http://localhost:8000 as defined in the `.flaskenv` file, which Flask uses to load it's configuration from the environment by default.
-
-To test and check the coverage: 
-```shell
-$ green
-```
-
-Later this semester, github actions will be added to allow the auto testing. Currently we manually list the result: 
-
-```
-Name                               Stmts   Miss  Cover   Missing
-----------------------------------------------------------------
-service/__init__.py                   17      2    88%   31-32
-service/common/cli_commands.py         7      0   100%
-service/common/error_handlers.py      38      6    84%   77-79, 107-109
-service/common/log_handlers.py        11      1    91%   35
-service/common/status.py              45      0   100%
-service/config.py                      5      0   100%
-service/models.py                     59      0   100%
-service/routes.py                     55      2    96%   117-118
-----------------------------------------------------------------
-TOTAL                                237     11    95%
-```
-
-Currently the listing api is still missing, once its work finishes, the pull request will be merged. Thus, the actual coverage of routes is expected to be higher.
 
 ## License
 
