@@ -65,7 +65,8 @@ Request Body (JSON)
   "address": "5th Fifth Ave, NY",
   "email": "john@gmail.com",
   "phone_number": "12345678",
-  "password": "password"
+  "password": "password",
+  "available": True
 }
 
 
@@ -80,7 +81,8 @@ Success Response : `HTTP_200_CREATED`
     "address": "5th Fifth Ave, NY",
     "email": "john@gmail.com",
     "phone_number": "12345678",
-    "password": "password"
+    "password": "password",
+    "available": True
 }
 ]
 ```
@@ -108,7 +110,8 @@ Success Response : `HTTP_200_OK`
     "address": "5th Fifth Ave, NY",
     "email": "john@gmail.com",
     "phone_number": "12345678",
-    "password": "password"
+    "password": "password",
+    "available": True
 }
 ]
 ```
@@ -145,7 +148,8 @@ Request Body (JSON)
     "address": "5th Fifth Ave, NY",
     "email": "john@gmail.com",
     "phone_number": "12345678",
-    "password": "password"
+    "password": "password",
+    "available": True
 }
 ```
 
@@ -159,7 +163,8 @@ Success Response : `HTTP_200_OK`
     "address": "5th Fifth Ave, NY",
     "email": "john@gmail.com",
     "phone_number": "12345678",
-    "password": "password"
+    "password": "password",
+    "available": True
 }
 ]
 
@@ -218,7 +223,8 @@ Success Response : `HTTP_200_OK`
     "address": "5th Fifth Ave, NY",
     "email": "john@gmail.com",
     "phone_number": "12345678",
-    "password": "password"
+    "password": "password",
+    "available": True
 }
 ]
 ```
@@ -244,6 +250,11 @@ service/                   - service python package
     ├── error_handlers.py  - HTTP error handling code
     ├── log_handlers.py    - logging setup code
     └── status.py          - HTTP status constants
+└── static                 - static code package
+    ├── css                - UI page format
+    ├── images             - UI page mage
+    ├── js                 - UI page constants
+    └── index.html         - UI page alignment
 
 tests/              - test cases package
 ├── __init__.py     - package initializer
