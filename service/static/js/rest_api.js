@@ -12,6 +12,11 @@ $(function () {
         $("#customer_email").val(res.email);
         $("#customer_password").val(res.password);
         $("#customer_phone_number").val(res.phone_number);
+        if (res.available == true) {
+            $("#customer_available").val("true");
+        } else {
+            $("#customer_available").val("false");
+        }
     }
 
     /// Clears all form fields
@@ -22,6 +27,7 @@ $(function () {
         $("#customer_email").val("");
         $("#customer_password").val("");
         $("#customer_phone_number").val("");
+        $("#customer_available").val("");
     }
 
     // Updates the flash message area
@@ -41,13 +47,15 @@ $(function () {
         let email = $("#customer_email").val();
         let password = $("#customer_password").val();
         let phone_number = $("#customer_phone_number").val();
+        let available = $("#customer_available").val() == "true";
 
         let data = {
             "name": name,
             "address":address,
             "email":email,
             "password":password,
-            "phone_number":phone_number
+            "phone_number":phone_number,
+            "available":available
         };
 
         $("#flash_message").empty();
@@ -80,6 +88,7 @@ $(function () {
         let name = $("#customer_name").val();
         let address = $("#customer_address").val();
         let phone_number = $("#customer_phone_number").val();
+        let available = $("#customer_available").val() == "true";
         let email = $("#customer_email").val();
         let password = $("#customer_password").val();
        
@@ -88,6 +97,7 @@ $(function () {
             "name": name,
             "address": address,
             "phone_number": phone_number,
+            "available":available,
             "email": email,
             "password": password
         };
@@ -188,9 +198,10 @@ $(function () {
         let name = $("#customer_name").val();
         let address = $("#customer_address").val();
         let password = $("#customer_password").val();
+        let available = $("#available").val() == "true";
 
         $("#flash_message").empty();
-        if (name || address || password ) {
+        if (name || address || password || available) {
             flash_message("Only support id, email, phone_number query");
             return;
         }
@@ -218,6 +229,13 @@ $(function () {
                 queryString += 'phone_number=' + phone_number
             }
         }
+        if (available) {
+            if (queryString.length > 0) {
+                queryString += '&available=' + available
+            } else {
+                queryString += 'available=' + available
+            }
+        }
 
         $("#flash_message").empty();
 
@@ -239,11 +257,12 @@ $(function () {
             table += '<th class="col-md-2">Address</th>'
             table += '<th class="col-md-2">Password</th>'
             table += '<th class="col-md-2">Phone_Number</th>'
+            table += '<th class="col-md-2">Available</th>'
             table += '</tr></thead><tbody>'
             let firstCustomer = "";
             for(let i = 0; i < res.length; i++) {
                 let pet = res[i];
-                table +=  `<tr id="row_${i}"><td>${customer.id}</td><td>${customer.name}</td><td>${customer.email}</td><td>${customer.address}</td><td>${customer.password}</td><td>${customer.phone_number}</td></tr>`;
+                table +=  `<tr id="row_${i}"><td>${customer.id}</td><td>${customer.name}</td><td>${customer.email}</td><td>${customer.address}</td><td>${customer.password}</td><td>${customer.phone_number}</td><td>${customer.available}</td></tr>`;
                 if (i == 0) {
                     firstCustomer = customer;
                 }
