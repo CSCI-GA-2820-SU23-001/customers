@@ -171,7 +171,7 @@ $(function () {
 
         ajax.done(function(res){
             clear_form_data()
-            flash_message("Pet has been Deleted!")
+            flash_message("Customer has been Deleted!")
         });
 
         ajax.fail(function(res){
@@ -261,7 +261,7 @@ $(function () {
             table += '</tr></thead><tbody>'
             let firstCustomer = "";
             for(let i = 0; i < res.length; i++) {
-                let pet = res[i];
+                let customer = res[i];
                 table +=  `<tr id="row_${i}"><td>${customer.id}</td><td>${customer.name}</td><td>${customer.email}</td><td>${customer.address}</td><td>${customer.password}</td><td>${customer.phone_number}</td><td>${customer.available}</td></tr>`;
                 if (i == 0) {
                     firstCustomer = customer;
