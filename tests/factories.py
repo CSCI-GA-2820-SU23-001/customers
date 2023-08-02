@@ -17,11 +17,12 @@ Test Factory to make fake objects for testing
 """
 
 import factory
+from factory.fuzzy import FuzzyChoice
 from service.models import Customer
 
 
 class CustomerFactory(factory.Factory):
-    """ Creates fake customers that you don't have to feed """
+    """Creates fake customers that you don't have to feed"""
 
     class Meta:  # pylint: disable=too-few-public-methods
         """Maps factory to data model"""
@@ -34,3 +35,4 @@ class CustomerFactory(factory.Factory):
     email = factory.Faker("email")
     password = factory.Faker("password")
     phone_number = factory.Faker("phone_number")
+    available = FuzzyChoice(choices=[True, False])
