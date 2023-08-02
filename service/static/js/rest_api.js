@@ -40,7 +40,7 @@ $(function () {
         let address = $("#customer_address").val();
         let email = $("#customer_email").val();
         let password = $("#customer_password").val();
-        let phone_number = $("#customer_phone_bumber").val();
+        let phone_number = $("#customer_phone_number").val();
 
         let data = {
             "name": name,
@@ -54,7 +54,7 @@ $(function () {
         
         let ajax = $.ajax({
             type: "POST",
-            url: "/customerss",
+            url: "/customers",
             contentType: "application/json",
             data: JSON.stringify(data),
         });
