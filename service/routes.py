@@ -42,7 +42,10 @@ def get_customers(customer_id):
     app.logger.info("Request for customer with id: %s", customer_id)
     customer = Customer.find(customer_id)
     if not customer:
-        abort(status.HTTP_404_NOT_FOUND, f"Customer with id '{customer_id}' was not found.")
+        abort(
+            status.HTTP_404_NOT_FOUND,
+            f"Customer with id '{customer_id}' was not found.",
+        )
 
     app.logger.info("Returning customer: %s", customer.name)
     return jsonify(customer.serialize()), status.HTTP_200_OK
@@ -84,7 +87,10 @@ def update_customers(customer_id):
 
     customer = Customer.find(customer_id)
     if not customer:
-        abort(status.HTTP_404_NOT_FOUND, f"Customer with id '{customer_id}' was not found.")
+        abort(
+            status.HTTP_404_NOT_FOUND,
+            f"Customer with id '{customer_id}' was not found.",
+        )
     customer.deserialize(request.get_json())
     customer.id = customer_id
     customer.update()
@@ -114,6 +120,7 @@ def delete_customers(customer_id):
 # list a customer #
 ######################################################################
 
+
 @app.route("/customers", methods=["GET"])
 def list_customers():
     """Returns all of the Customers"""
@@ -131,6 +138,61 @@ def list_customers():
     results = [customer.serialize() for customer in customers]
     app.logger.info("Returning %d customers", len(results))
     return jsonify(results), status.HTTP_200_OK
+
+
+######################################################################
+# SUSPEND A CUSTOMER
+######################################################################
+
+
+@app.route("/customers/<int:customer_id>/suspend", methods=["PUT"])
+def suspend_customer(customer_id):
+    """
+    Suspend a Customer
+    This endpoint will suspend a Customer based on the id specified in the path
+    """
+    app.logger.info("Request to suspend Customer with id: %s", customer_id)
+
+    customer = Customer.find(customer_id)
+    if not customer:
+        # if no customer is found, return a 404
+        app.logger.error("Customer with id %s does not exist", customer_id)
+        abort(
+            status.HTTP_404_NOT_FOUND, f"Customer with id {customer_id} does not exist"
+        )
+
+    customer.available = False
+    customer.update()
+    app.logger.error("Customer with id %s suspend complete.", customer_id)
+    return (jsonify(customer.serialize()), status.HTTP_200_OK)
+
+
+######################################################################
+# ACTIVATE A CUSTOMER
+######################################################################
+
+
+@app.route("/customers/<int:customer_id>/activate", methods=["PUT"])
+def activate_customer(customer_id):
+    """
+    Activate a Customer
+    This endpoint will activate a Customer, setting suspended to false,
+    based on the id specified in the path
+    """
+    app.logger.info("Request to activate Customer with id: %s", customer_id)
+
+    customer = Customer.find(customer_id)
+    if not customer:
+        # if no customer is found, return a 404
+        app.logger.error("Customer with id %s does not exist", customer_id)
+        abort(
+            status.HTTP_404_NOT_FOUND, f"Customer with id {customer_id} does not exist"
+        )
+
+    customer.available = True
+    customer.update()
+    app.logger.error("Customer with id %s activated complete.", customer_id)
+    return (jsonify(customer.serialize()), status.HTTP_200_OK)
 
 
 ######################################################################
