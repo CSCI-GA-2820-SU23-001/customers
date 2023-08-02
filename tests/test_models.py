@@ -1,6 +1,5 @@
 """
 Test cases for Customer Model
-
 """
 import os
 import logging
@@ -15,7 +14,7 @@ DATABASE_URI = os.getenv(
 
 
 ######################################################################
-#  Customer   M O D E L   T E S T   C A S E S
+# Customer Model Test Cases
 ######################################################################
 class TestCustomer(unittest.TestCase):
     """Test Cases for Customer Model"""
@@ -103,7 +102,7 @@ class TestCustomer(unittest.TestCase):
         db.session.remove()
 
     ######################################################################
-    #  T E S T   C A S E S
+    # T E S T C A S E S
     ######################################################################
 
     def test_create_a_customer(self):
@@ -162,7 +161,7 @@ class TestCustomer(unittest.TestCase):
         customer.create()
         logging.debug(customer)
         self.assertIsNotNone(customer.id)
-        # Change it an save it
+        # Change it and save it
         customer.name = "customer2"
         original_customer_id = customer.id
         customer.update()
