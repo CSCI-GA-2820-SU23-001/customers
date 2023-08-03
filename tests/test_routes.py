@@ -22,9 +22,7 @@ FLAG = False
 ######################################################################
 #  T E S T   C A S E S
 ######################################################################
-class TestYourResourceServer(TestCase):
-    
-    
+class TestYourResourceServer(TestCase):     
     """REST API Server Tests"""
     @classmethod
     def setUpClass(cls):
@@ -281,8 +279,7 @@ class TestYourResourceServer(TestCase):
 
         # activate the customer
         response = self.client.put(f"{BASE_URL}/0/activate")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)   
-
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)  
 
 
     def test_list_customers_by_name(self):
@@ -302,3 +299,4 @@ class TestYourResourceServer(TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()
         self.assertTrue(all([cust["available"] for cust in data]))
+        
