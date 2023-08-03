@@ -17,7 +17,7 @@ DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/testdb"
 )
 BASE_URL = "/customers"
-
+FLAG = False
 
 ######################################################################
 #  T E S T   C A S E S
@@ -45,6 +45,8 @@ class TestYourResourceServer(TestCase):
         self.client = app.test_client()
         db.session.query(Customer).delete()  # clean up the last tests
         db.session.commit()
+        self.app=app.test_client()
+        self.app.testing=True
 
     def tearDown(self):
         """This runs after each test"""
@@ -278,4 +280,24 @@ class TestYourResourceServer(TestCase):
 
         # activate the customer
         response = self.client.put(f"{BASE_URL}/0/activate")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)   
+
+
+
+    def test_list_customers_by_name(self):
+        """ Get a list of Customers by name """
+        customers = self._create_customers(5)
+        target_name = customers[0].name
+        resp = self.app.get("/customers", query_string={"name": target_name})
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()
+        self.assertEqual(len(data), 1)
+        self.assertEqual(data[0]["name"], target_name)
+
+    def test_list_customers_by_availability(self):
+        """ Get a list of Customers by availability """
+        self._create_customers(5)
+        resp = self.app.get("/customers", query_string={"available": "true"})
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = resp.get_json()
+        self.assertTrue(all([cust["available"] for cust in data]))
