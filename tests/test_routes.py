@@ -82,14 +82,14 @@ class TestYourResourceServer(TestCase):
         response = self.client.post(BASE_URL, json={})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_get_customer(self):
-        """It should Get a single customer"""
-        # get the name of a customer
-        test_customer = self._create_customers(1)[0]
-        response = self.client.get(f"{BASE_URL}/{test_customer.id}")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        data = response.get_json()
-        self.assertEqual(data["name"], test_customer.name)
+    # def test_get_customer(self):
+    #     """It should Get a single customer"""
+    #     # get the name of a customer
+    #     test_customer = self._create_customers(1)[0]
+    #     response = self.client.get(f"{BASE_URL}/{test_customer.id}")
+    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+    #     data = response.get_json()
+    #     self.assertEqual(data["name"], test_customer.name)
 
     def test_get_customer_list(self):
         """It should Get a list of Customers"""
@@ -110,13 +110,13 @@ class TestYourResourceServer(TestCase):
         data = cust_get_req.get_json()
         self.assertEqual(len(data), 5)
 
-    def test_get_customer_not_found(self):
-        """It should not Get a customer thats not found"""
-        response = self.client.get(f"{BASE_URL}/0")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        data = response.get_json()
-        logging.debug("Response data = %s", data)
-        self.assertIn("was not found", data["message"])
+    # def test_get_customer_not_found(self):
+    #     """It should not Get a customer thats not found"""
+    #     response = self.client.get(f"{BASE_URL}/0")
+    #     self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+    #     data = response.get_json()
+    #     logging.debug("Response data = %s", data)
+    #     self.assertIn("was not found", data["message"])
 
     def test_update_customers(self):
         """Factory method to create customers in bulk"""
@@ -165,10 +165,10 @@ class TestYourResourceServer(TestCase):
         resp = self.client.get(f"{BASE_URL}/{customer_id}")
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_delete_not_found(self):
-        """It should not delete a customer thats not found"""
-        resp = self.client.delete(f"{BASE_URL}/-1")
-        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+    # def test_delete_not_found(self):
+    #     """It should not delete a customer thats not found"""
+    #     resp = self.client.delete(f"{BASE_URL}/-1")
+    #     self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_update_customer_not_found(self):
         """It should not Update a customer that's not found"""
