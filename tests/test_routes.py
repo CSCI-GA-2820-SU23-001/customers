@@ -25,6 +25,7 @@ FLAG = False
 class TestYourResourceServer(TestCase):
     """REST API Server Tests"""
 
+
     @classmethod
     def setUpClass(cls):
         """This runs once before the entire test suite"""

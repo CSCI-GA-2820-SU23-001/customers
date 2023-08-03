@@ -22,7 +22,7 @@ def index():
 
 
 ######################################################################
-#  R E S T   A P I   E N D P O I N T S
+# REST API ENDPOINTS
 ######################################################################
 
 
@@ -50,6 +50,7 @@ def get_customers(customer_id):
 ######################################################################
 # ADD A NEW CUSTOMER
 ######################################################################
+
 @app.route("/customers", methods=["POST"])
 def create_customers():
     """
@@ -146,8 +147,6 @@ def list_customers():
 ######################################################################
 # SUSPEND A CUSTOMER
 ######################################################################
-
-
 @app.route("/customers/<int:customer_id>/suspend", methods=["PUT"])
 def suspend_customer(customer_id):
     """
