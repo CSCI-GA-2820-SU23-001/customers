@@ -218,9 +218,9 @@ class TestCustomer(unittest.TestCase):
         self.assertTrue(customer)
         customer.delete()
         customer = Customer.all()
-        self.assertEqual(len(customer), 0)
-                     
-    def test_find_by_availability_true(self):
+        self.assertEqual(len(customer), 0) 
+    
+    def test_find_by_availability_true(self):     
         """ Find Customers by availability - True """
         available_customer = CustomerFactory(available=True)
         unavailable_customer = CustomerFactory(available=False)

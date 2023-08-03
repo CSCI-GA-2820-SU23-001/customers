@@ -22,8 +22,9 @@ FLAG = False
 ######################################################################
 #  T E S T   C A S E S
 ######################################################################
-class TestYourResourceServer(TestCase):     
+class TestYourResourceServer(TestCase):      
     """REST API Server Tests"""
+    
     @classmethod
     def setUpClass(cls):
         """This runs once before the entire test suite"""
@@ -42,10 +43,11 @@ class TestYourResourceServer(TestCase):
     def setUp(self):
         """This runs before each test"""
         self.client = app.test_client()
-        db.session.query(Customer).delete()  # clean up the last tests
+        db.session.query(Customer).delete()
         db.session.commit()
-        self.app=app.test_client()
+        self.app=app.test_client() 
         self.app.testing=True
+        
 
     def tearDown(self):
         """This runs after each test"""
