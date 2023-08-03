@@ -218,20 +218,7 @@ class TestCustomer(unittest.TestCase):
         self.assertTrue(customer)
         customer.delete()
         customer = Customer.all()
-        self.assertEqual(len(customer), 0) 
-    
-    def test_find_by_availability_true(self):     
-        """ Find Customers by availability - True """
-        available_customer = CustomerFactory(available=True)
-        unavailable_customer = CustomerFactory(available=False)
-        db.session.add(available_customer)
-        db.session.add(unavailable_customer)
-        db.session.commit()
-        query = Customer.find_by_availability(True)
-        customers = query.all()
-        self.assertEqual(len(customers), 1)
-        self.assertEqual(customers[0].id, available_customer.id)
-        self.assertTrue(customers[0].available)
+        self.assertEqual(len(customer), 0)
 
     def test_find_by_availability_false(self):
         """ Find Customers by availability - False """

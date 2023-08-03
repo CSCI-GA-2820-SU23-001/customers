@@ -22,9 +22,10 @@ FLAG = False
 ######################################################################
 #  T E S T   C A S E S
 ######################################################################
-class TestYourResourceServer(TestCase):      
-    """REST API Server Tests"""
-    
+
+
+class TestYourResourceServer(TestCase):
+    """REST API SERVER Tests"""
     @classmethod
     def setUpClass(cls):
         """This runs once before the entire test suite"""
@@ -45,9 +46,8 @@ class TestYourResourceServer(TestCase):
         self.client = app.test_client()
         db.session.query(Customer).delete()
         db.session.commit()
-        self.app=app.test_client() 
-        self.app.testing=True
-        
+        self.app = app.test_client()
+        self.app.testing = True
 
     def tearDown(self):
         """This runs after each test"""
@@ -281,8 +281,7 @@ class TestYourResourceServer(TestCase):
 
         # activate the customer
         response = self.client.put(f"{BASE_URL}/0/activate")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)  
-
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_list_customers_by_name(self):
         """ Get a list of Customers by name """
@@ -301,4 +300,3 @@ class TestYourResourceServer(TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()
         self.assertTrue(all([cust["available"] for cust in data]))
-        
