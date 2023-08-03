@@ -299,4 +299,5 @@ class TestYourResourceServer(TestCase):
         resp = self.app.get("/customers", query_string={"available": "true"})
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()
-        self.assertTrue(all([cust["available"] for cust in data]))
+        self.assertTrue(all(cust['available'] for cust in data))
+
