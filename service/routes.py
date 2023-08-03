@@ -130,8 +130,8 @@ def list_customers():
 
     if customer_id:
         customers = Customer.find_by_id(customer_id)
-    # elif phone:
-    #     customers = Customer.find_by_phone(phone)
+    elif phone:
+        customers = Customer.find_by_phone(phone)
     elif name:
         customers = Customer.find_by_name(name)
     elif available:
