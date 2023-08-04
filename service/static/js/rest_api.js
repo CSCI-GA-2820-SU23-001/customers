@@ -47,15 +47,15 @@ $(function () {
         let email = $("#customer_email").val();
         let password = $("#customer_password").val();
         let phone_number = $("#customer_phone_number").val();
-        let available = $("#customer_available").val() == "true";
+        let available = $("#customer_available").val()=="true";
 
         let data = {
             "name": name,
-            "address":address,
-            "email":email,
-            "password":password,
-            "phone_number":phone_number,
-            "available":available
+            "address": address,
+            "email": email,
+            "password": password,
+            "phone_number": phone_number,
+            "available": available
         };
 
         $("#flash_message").empty();
@@ -87,19 +87,18 @@ $(function () {
         let customer_id = $("#customer_id").val();
         let name = $("#customer_name").val();
         let address = $("#customer_address").val();
-        let phone_number = $("#customer_phone_number").val();
-        let available = $("#customer_available").val() == "true";
         let email = $("#customer_email").val();
         let password = $("#customer_password").val();
-       
-
+        let phone_number = $("#customer_phone_number").val();
+        let available = $("#customer_available").val()=="true";
+        
         let data = {
             "name": name,
             "address": address,
-            "phone_number": phone_number,
-            "available":available,
             "email": email,
-            "password": password
+            "password": password,
+            "phone_number": phone_number,
+            "available": available
         };
 
         $("#flash_message").empty();
@@ -194,26 +193,30 @@ $(function () {
     // ****************************************
 
     $("#search-btn").click(function () {
-
+        // let id = $("#customer_id").val();
         let name = $("#customer_name").val();
         let address = $("#customer_address").val();
-        let password = $("#customer_password").val();
-        let available = $("#available").val() == "true";
-
-        $("#flash_message").empty();
-        if (name || address || password || available) {
-            flash_message("Only support id, email, phone_number query");
-            return;
-        }
-
-        let customer_id = $("#customer_id").val();
         let email = $("#customer_email").val();
         let phone_number = $("#customer_phone_number").val();
+        let available = $("#customer_available").val();
+
         let queryString = ""
-
-
-        if (customer_id) {
-            queryString += 'id=' + customer_id
+        // if (customer_id) {
+        //     queryString += 'id=' + customer_id
+        // }
+        if (name) {
+            if (queryString.length > 0) {
+                queryString += '&name=' + name
+            } else {
+                queryString += 'name=' + name
+            }
+        }
+        if (address) {
+            if (queryString.length > 0) {
+                queryString += '&address=' + address
+            } else {
+                queryString += 'address=' + address
+            }
         }
         if (email) {
             if (queryString.length > 0) {
@@ -253,16 +256,16 @@ $(function () {
             table += '<thead><tr>'
             table += '<th class="col-md-2">ID</th>'
             table += '<th class="col-md-2">Name</th>'
-            table += '<th class="col-md-2">Email</th>'
-            table += '<th class="col-md-2">Address</th>'
-            table += '<th class="col-md-2">Password</th>'
-            table += '<th class="col-md-2">Phone_Number</th>'
-            table += '<th class="col-md-2">Available</th>'
+            table += '<th class="col-md-2">address</th>'
+            table += '<th class="col-md-2">email</th>'
+            table += '<th class="col-md-2">password</th>'
+            table += '<th class="col-md-2">phone</th>'
+            table += '<th class="col-md-2">available</th>'
             table += '</tr></thead><tbody>'
             let firstCustomer = "";
             for(let i = 0; i < res.length; i++) {
                 let customer = res[i];
-                table +=  `<tr id="row_${i}"><td>${customer.id}</td><td>${customer.name}</td><td>${customer.email}</td><td>${customer.address}</td><td>${customer.password}</td><td>${customer.phone_number}</td><td>${customer.available}</td></tr>`;
+                table +=  `<tr id="row_${i}"><td>${customer.id}</td><td>${customer.name}</td><td>${customer.address}</td><td>${customer.email}</td><td>${customer.password}</td><td>${customer.phone_number}</td><td>${customer.available}</td></tr>`;
                 if (i == 0) {
                     firstCustomer = customer;
                 }
