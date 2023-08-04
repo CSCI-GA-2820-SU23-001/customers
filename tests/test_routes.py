@@ -9,11 +9,11 @@ import os
 import logging
 import json
 from unittest import TestCase
+from unittest.mock import patch
 from service import app
 from service.models import db, init_db, Customer
 from service.common import status  # HTTP Status Codes
 from tests.factories import CustomerFactory
-from unittest.mock import patch
 
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/testdb"
@@ -306,12 +306,14 @@ class TestYourResourceServer(TestCase):
 
     @patch.object(Customer, 'find_by_phone')
     def test_find_by_phone(self, mock_find_by_phone):
+        """
+        to test whether we can list customers by searching phone number.
+        """
         mock_customers = [Customer(phone_number=self.phone_number)]
         mock_find_by_phone.return_value = mock_customers
 
         response = self.app.get(f'/customers?phone_number={self.phone_number}')
         self.assertEqual(response.status_code, 200)
-
         results = json.loads(response.data)
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0]['phone_number'], self.phone_number)
