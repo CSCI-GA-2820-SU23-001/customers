@@ -5,6 +5,7 @@
 
 [![codecov](https://codecov.io/gh/CSCI-GA-2820-SU23-001/customers/branch/master/graph/badge.svg?token=L9SLZ9KEXM)](https://codecov.io/gh/CSCI-GA-2820-SU23-001/customers)
 [![Build Status](https://github.com/CSCI-GA-2820-SU23-001/customers/actions/workflows/tdd.yml/badge.svg)](https://github.com/CSCI-GA-2820-SU23-001/customers/actions)
+[![Build Status](https://github.com/CSCI-GA-2820-SU23-001/customers/actions/workflows/bdd.yml/badge.svg)](https://github.com/CSCI-GA-2820-SU23-001/customers/actions)
 
 
 This is a skeleton you can use to start your projects
