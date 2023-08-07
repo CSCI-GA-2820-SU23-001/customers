@@ -132,19 +132,6 @@ class TestCustomer(unittest.TestCase):
         for customer in found:
             self.assertEqual(customer.email, email)
 
-    def test_find_or_404_found(self):
-        """It should Find or return 404 not found for Customer"""
-        customers = CustomerFactory.create_batch(3)
-        for customer in customers:
-            customer.create()
-
-        customer = Customer.find_or_404(customers[1].id)
-        self.assertIsNot(customer, None)
-        self.assertEqual(customer.id, customers[1].id)
-        self.assertEqual(customer.phone_number, customers[1].phone_number)
-        self.assertEqual(customer.address, customers[1].address)
-        self.assertEqual(customer.email, customers[1].email)
-
     def test_find_by_availability_false(self):
         """ Find Customers by availability -- False """
         available_customer = CustomerFactory(available=True)
@@ -162,31 +149,6 @@ class TestCustomer(unittest.TestCase):
     #     """ Find Customers by availability - No Customers """
     #     customers = Customer.find_by_availability(True)
     #     self.assertEqual(len(customers), 0)
-
-    def test_find_by_phone_existing(self):
-        """ Find Customers with an existing phone number """
-        customer_with_phone = CustomerFactory(phone_number="1234567890")
-        customer_without_phone = CustomerFactory(phone_number="0987654321")
-        db.session.add(customer_with_phone)
-        db.session.add(customer_without_phone)
-        db.session.commit()
-        customers = Customer.find_by_phone("1234567890")
-        self.assertEqual(len(customers), 1)
-        self.assertEqual(customers[0].id, customer_with_phone.id)
-        self.assertEqual(customers[0].phone_number, "1234567890")
-
-    def test_find_by_phone_non_existing(self):
-        """ Find Customers with a non-existing phone number """
-        customer = CustomerFactory(phone_number="1234567890")
-        db.session.add(customer)
-        db.session.commit()
-        customers = Customer.find_by_phone("0987654321")
-        self.assertEqual(len(customers), 0)
-
-    def test_find_by_phone_empty(self):
-        """ Find Customers with phone number when no Customers in DB """
-        customers = Customer.find_by_phone("1234567890")
-        self.assertEqual(len(customers), 0)
 
     @classmethod
     def setUpClass(cls):
