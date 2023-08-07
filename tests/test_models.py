@@ -14,7 +14,7 @@ DATABASE_URI = os.getenv(
 
 
 ######################################################################
-# Customer Model Test Cases
+# Customer Model Test Cases.
 ######################################################################
 class TestCustomer(unittest.TestCase):
     """Test Cases for Customer Model"""
