@@ -160,7 +160,7 @@ class Customer(db.Model):
 
     @classmethod
     def find_by_email(cls, email):
-        """Returns the Customer with the given email
+        """Return the Customer with the given email
 
         Args:
             email (string): the email of the Customer you want to match
