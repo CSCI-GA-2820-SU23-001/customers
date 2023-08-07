@@ -13,7 +13,7 @@ def init_db(app):
     Customer.init_db(app)
 
 class DataValidationError(Exception):
-    """Used for an data validation errors when deserializing"""
+    """Used for data validation errors when deserializing"""
 
 class Customer(db.Model):
     """Class that represents a Customer"""
@@ -30,14 +30,14 @@ class Customer(db.Model):
         return f"<Customer {self.name} id=[{self.id}]>"
 
     def create(self):
-        """Creates a Customer to the database"""
+        """Creates a Customer in the database"""
         logger.info("Creating %s", self.name)
         self.id = None
         db.session.add(self)
         db.session.commit()
 
     def update(self):
-        """Updates a Customer to the database"""
+        """Updates a Customer in the database"""
         logger.info("Saving %s", self.name)
         db.session.commit()
 
@@ -85,7 +85,7 @@ class Customer(db.Model):
 
     @classmethod
     def all(cls):
-        """Returns all of the Customers in the database"""
+        """Returns all Customers in the database"""
         logger.info("Processing all Customers")
         return cls.query.all()
 
