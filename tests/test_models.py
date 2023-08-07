@@ -123,7 +123,7 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(found.count(), count)
         for customer in found:
             self.assertEqual(customer.email, email)
-    
+
     def test_find_or_404_found(self):
         """It should Find or return 404 not found for Customer"""
         customers = CustomerFactory.create_batch(3)

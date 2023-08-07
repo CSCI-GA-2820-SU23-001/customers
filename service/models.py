@@ -167,7 +167,7 @@ class Customer(db.Model):
         """
         logger.info("Processing available query for %s ...", available)
         return cls.query.filter(cls.available == available)
-    
+
     @classmethod
     def find_or_404(cls, customer_id: int):
         """Find a Customer by it's id
