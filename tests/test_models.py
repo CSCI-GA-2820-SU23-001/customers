@@ -6,6 +6,7 @@ import logging
 import unittest
 from service.models import Customer, db, DataValidationError
 from service import app
+from werkzeug.exceptions import NotFound
 from tests.factories import CustomerFactory
 
 DATABASE_URI = os.getenv(
@@ -122,6 +123,24 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(found.count(), count)
         for customer in found:
             self.assertEqual(customer.email, email)
+    
+    def test_find_or_404_found(self):
+        """It should Find or return 404 not found for Customer"""
+        customers = CustomerFactory.create_batch(3)
+        for customer in customers:
+            customer.create()
+
+        customer = Customer.find_or_404(customers[1].id)
+        self.assertIsNot(customer, None)
+        self.assertEqual(customer.id, customers[1].id)
+        self.assertEqual(customer.first_name, customers[1].first_name)
+        self.assertEqual(customer.last_name, customers[1].last_name)
+        self.assertEqual(customer.email, customers[1].email)
+        self.assertEqual(customer.active, customers[1].active)
+
+    def test_find_or_404_not_found(self):
+        """It should return 404 not found for Customer"""
+        self.assertRaises(NotFound, Customer.find_or_404, 0)
 
     def test_find_by_availability_false(self):
         """ Find Customers by availability -- False """

@@ -167,6 +167,20 @@ class Customer(db.Model):
         """
         logger.info("Processing available query for %s ...", available)
         return cls.query.filter(cls.available == available)
+    
+    @classmethod
+    def find_or_404(cls, customer_id: int):
+        """Find a Customer by it's id
+
+        :param customer_id: the id of the Customer to find
+        :type customer_id: int
+
+        :return: an instance with the customer_id, or 404_NOT_FOUND if not found
+        :rtype: Customer
+
+        """
+        logger.info("Processing lookup or 404 for id %s ...", customer_id)
+        return cls.query.get_or_404(customer_id)
 
     @classmethod
     def find_by_phone(cls, phone):
