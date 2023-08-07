@@ -287,7 +287,7 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(len(customer), 0)
 
     def test_find_by_availability_false(self):
-        """ Find Customers by availability - False """
+        """ Find Customers by availability -- False """
         available_customer = CustomerFactory(available=True)
         unavailable_customer = CustomerFactory(available=False)
         db.session.add(available_customer)
