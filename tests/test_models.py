@@ -4,9 +4,9 @@ Test cases for Customer Model
 import os
 import logging
 import unittest
+from werkzeug.exceptions import NotFound
 from service.models import Customer, db, DataValidationError
 from service import app
-from werkzeug.exceptions import NotFound
 from tests.factories import CustomerFactory
 
 DATABASE_URI = os.getenv(
