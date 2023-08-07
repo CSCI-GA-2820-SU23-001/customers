@@ -131,14 +131,18 @@ class Customer(db.Model):
         return cls.query.filter(cls.name == name).all()
 
     @classmethod
-    def find_by_phone(cls, phone):
-        """Returns all Customers with the given name
+    def find_by_phone_number(cls, phone_number):
+        """Returns all Customers with the given phone_number
 
-        Args:
-            name (string): the name of the Customers you want to match
+        :param name: the phone_number of the Customers you want to match
+        :type phone_number: str
+
+        :return: a collection of Customers with that phone_number
+        :rtype: list
+
         """
-        logger.info("Processing phone number query for %s ...", phone)
-        return cls.query.filter(cls.phone_number == phone).all()
+        logger.info("Processing phone_number query for %s ...", phone_number)
+        return cls.query.filter(cls.phone_number == phone_number)
 
     @classmethod
     def find_by_address(cls, address):
@@ -177,9 +181,3 @@ class Customer(db.Model):
         """
         logger.info("Processing lookup or 404 for id %s ...", customer_id)
         return cls.query.get_or_404(customer_id)
-
-    @classmethod
-    def find_by_availability(cls, available: bool = True) -> list:
-        """Return all Customers by their availability"""
-        logger.info("Processing available query for %s ...", available)
-        return cls.query.filter(cls.available == available)
