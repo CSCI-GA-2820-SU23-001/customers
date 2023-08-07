@@ -144,7 +144,7 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(customer.phone_number, customers[1].phone_number)
         self.assertEqual(customer.address, customers[1].address)
         self.assertEqual(customer.email, customers[1].email)
-    
+
     def test_find_by_availability_false(self):
         """ Find Customers by availability -- False """
         available_customer = CustomerFactory(available=True)
