@@ -133,10 +133,10 @@ class TestCustomer(unittest.TestCase):
         customer = Customer.find_or_404(customers[1].id)
         self.assertIsNot(customer, None)
         self.assertEqual(customer.id, customers[1].id)
-        self.assertEqual(customer.first_name, customers[1].first_name)
-        self.assertEqual(customer.last_name, customers[1].last_name)
         self.assertEqual(customer.email, customers[1].email)
-        self.assertEqual(customer.active, customers[1].active)
+        self.assertEqual(customer.phone_number, customers[1].phone_number)
+        self.assertEqual(customer.address, customers[1].address)
+        self.assertEqual(customer.available, customers[1].available)
 
     def test_find_or_404_not_found(self):
         """It should return 404 not found for Customer"""
