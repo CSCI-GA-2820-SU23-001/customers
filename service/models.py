@@ -181,7 +181,7 @@ class Customer(db.Model):
         """
         logger.info("Processing lookup or 404 for id %s ...", customer_id)
         return cls.query.get_or_404(customer_id)
-    
+
     @classmethod
     def find_by_availability(cls, available: bool = True) -> list:
         """Returns all Pets by their availability
@@ -195,7 +195,7 @@ class Customer(db.Model):
         """
         logger.info("Processing available query for %s ...", available)
         return cls.query.filter(cls.available == available)
-    
+
     @classmethod
     def find_by_phone(cls, phone):
         """Returns all Customers with the given name
@@ -205,4 +205,3 @@ class Customer(db.Model):
         """
         logger.info("Processing phone number query for %s ...", phone)
         return cls.query.filter(cls.phone_number == phone).all()
-
