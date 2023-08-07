@@ -10,7 +10,6 @@ logger = logging.getLogger("flask.app")
 # Create the SQLAlchemy object to be initialized later in init_db()
 db = SQLAlchemy()
 
-
 # Function to initialize the database
 def init_db(app):
     """Initializes the SQLAlchemy app"""
@@ -40,18 +39,14 @@ class Customer(db.Model):
         return f"<Customer {self.name} id=[{self.id}]>"
 
     def create(self):
-        """
-        Creates a Customer to the database
-        """
+        """Creates a Customer to the database"""
         logger.info("Creating %s", self.name)
         self.id = None  # pylint: disable=invalid-name
         db.session.add(self)
         db.session.commit()
 
     def update(self):
-        """
-        Updates a Customer to the database
-        """
+        """Updates a Customer to the database"""
         logger.info("Saving %s", self.name)
         db.session.commit()
 
@@ -184,24 +179,14 @@ class Customer(db.Model):
 
     @classmethod
     def find_by_availability(cls, available: bool = True) -> list:
-        """Returns all Pets by their availability
+        """Returns all Customers by their availability
 
         :param available: True for Customers that are available
         :type available: str
 
-        :return: a collection of Pets that are available
+        :return: a collection of Customers that are available
         :rtype: list
 
         """
         logger.info("Processing available query for %s ...", available)
         return cls.query.filter(cls.available == available)
-
-    @classmethod
-    def find_by_phone(cls, phone):
-        """Returns all Customers with the given name
-
-        Args:
-            name (string): the name of the Customers you want to match
-        """
-        logger.info("Processing phone number query for %s ...", phone)
-        return cls.query.filter(cls.phone_number == phone).all()
