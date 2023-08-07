@@ -179,7 +179,7 @@ class Customer(db.Model):
 
     @classmethod
     def find_by_availability(cls, available: bool = True) -> list:
-        """Returns all Customers by their availability
+        """Return all Customers by their availability
 
         :param available: True for Customers that are available
         :type available: str
