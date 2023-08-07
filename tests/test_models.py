@@ -12,6 +12,8 @@ DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/testdb"
 )
 
+# pylint: disable=invalid-name
+# pylint: disable=too-many-public-methods
 
 ######################################################################
 # Customer Model Test Cases.
@@ -94,18 +96,6 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(customer.address, customers[1].address)
         self.assertEqual(customer.email, customers[1].email)
 
-    def test_find_by_phone_number(self):
-        """It should Find Customer by Phone number"""
-        customers = CustomerFactory.create_batch(10)
-        for customer in customers:
-            customer.create()
-        phone_number = customers[0].phone_number
-        count = len([customer for customer in customers if customer.phone_number == phone_number])
-        found = Customer.find_by_phone_number(phone_number)
-        self.assertEqual(found.count(), count)
-        for customer in found:
-            self.assertEqual(customer.phone_number, phone_number)
-
     def test_find_by_address(self):
         """It should Find Customer by Address"""
         customers = CustomerFactory.create_batch(10)
@@ -149,6 +139,31 @@ class TestCustomer(unittest.TestCase):
     #     """ Find Customers by availability - No Customers """
     #     customers = Customer.find_by_availability(True)
     #     self.assertEqual(len(customers), 0)
+
+    def test_find_by_phone_existing(self):
+        """ Find Customers with an existing phone number """
+        customer_with_phone = CustomerFactory(phone_number="1234567890")
+        customer_without_phone = CustomerFactory(phone_number="0987654321")
+        db.session.add(customer_with_phone)
+        db.session.add(customer_without_phone)
+        db.session.commit()
+        customers = Customer.find_by_phone("1234567890")
+        self.assertEqual(len(customers), 1)
+        self.assertEqual(customers[0].id, customer_with_phone.id)
+        self.assertEqual(customers[0].phone_number, "1234567890")
+
+    def test_find_by_phone_non_existing(self):
+        """ Find Customers with a non-existing phone number """
+        customer = CustomerFactory(phone_number="1234567890")
+        db.session.add(customer)
+        db.session.commit()
+        customers = Customer.find_by_phone("0987654321")
+        self.assertEqual(len(customers), 0)
+
+    def test_find_by_phone_empty(self):
+        """ Find Customers with phone number when no Customers in DB """
+        customers = Customer.find_by_phone("1234567890")
+        self.assertEqual(len(customers), 0)
 
     @classmethod
     def setUpClass(cls):

@@ -131,18 +131,14 @@ class Customer(db.Model):
         return cls.query.filter(cls.name == name).all()
 
     @classmethod
-    def find_by_phone_number(cls, phone_number):
-        """Returns all Customers with the given phone_number
+    def find_by_phone(cls, phone):
+        """Returns all Customers with the given name
 
-        :param name: the phone_number of the Customers you want to match
-        :type phone_number: str
-
-        :return: a collection of Customers with that phone_number
-        :rtype: list
-
+        Args:
+            name (string): the name of the Customers you want to match
         """
-        logger.info("Processing phone_number query for %s ...", phone_number)
-        return cls.query.filter(cls.phone_number == phone_number)
+        logger.info("Processing phone number query for %s ...", phone)
+        return cls.query.filter(cls.phone_number == phone).all()
 
     @classmethod
     def find_by_address(cls, address):
