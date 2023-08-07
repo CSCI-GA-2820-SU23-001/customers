@@ -5,6 +5,8 @@ Test cases can be run with the following:
   nosetests -v --with-spec --spec-color
   coverage report -m
 """
+# pylint: disable=cyclic-import
+# pylint: disable=too-many-lines
 import os
 import logging
 import json
@@ -318,4 +320,4 @@ class TestYourResourceServer(TestCase):
         results = json.loads(response.data)
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0]['phone_number'], self.phone_number)
-    
+

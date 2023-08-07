@@ -11,7 +11,6 @@ from tests.factories import CustomerFactory
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/testdb"
 )
-
 # pylint: disable=invalid-name
 # pylint: disable=too-many-public-methods
 
