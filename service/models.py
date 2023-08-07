@@ -184,12 +184,12 @@ class Customer(db.Model):
 
     @classmethod
     def find_by_availability(cls, available: bool = True) -> list:
-        """Returns all Pets by their availability
+        """Returns all Customers by their availability
 
         :param available: True for Customers that are available
         :type available: str
 
-        :return: a collection of Pets that are available
+        :return: a collection of Customers that are available
         :rtype: list
 
         """
