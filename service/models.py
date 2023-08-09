@@ -1,6 +1,5 @@
 """
 Models for Customer
-
 All of the models are stored in this module
 """
 import logging
@@ -26,7 +25,6 @@ class Customer(db.Model):
     """
     Class that represents a Customer
     """
-
     app = None
 
     # Table Schema
@@ -118,7 +116,7 @@ class Customer(db.Model):
 
     @classmethod
     def find(cls, by_id):
-        """Finds a Customer by it's ID"""
+        """Finds a Customer by its ID"""
         logger.info("Processing lookup for id %s ...", by_id)
         return cls.query.get(by_id)
 
@@ -133,18 +131,56 @@ class Customer(db.Model):
         return cls.query.filter(cls.name == name).all()
 
     @classmethod
+    def find_by_address(cls, address):
+        """Returns all Customers with the given address
+
+        :param name: the address of the Customers you want to match
+        :type address: str
+
+        :return: a collection of Customers with that address
+        :rtype: list
+
+        """
+        logger.info("Processing address query for %s ...", address)
+        return cls.query.filter(cls.address == address)
+
+    @classmethod
+    def find_by_email(cls, email):
+        """Return the Customer with the given email
+
+        Args:
+            email (string): the email of the Customer you want to match
+        """
+        logger.info("Processing email query for %s ...", email)
+        return cls.query.filter(cls.email == email)
+
+    @classmethod
     def find_by_availability(cls, available: bool = True) -> list:
-        """Returns all Pets by their availability
+        """Returns all Customers by their availability
 
         :param available: True for Customers that are available
         :type available: str
 
-        :return: a collection of Pets that are available
+        :return: a collection of Customers that are available
         :rtype: list
 
         """
         logger.info("Processing available query for %s ...", available)
         return cls.query.filter(cls.available == available)
+
+    @classmethod
+    def find_or_404(cls, customer_id: int):
+        """Find a Customer by it's id
+
+        :param customer_id: the id of the Customer to find
+        :type customer_id: int
+
+        :return: an instance with the customer_id, or 404_NOT_FOUND if not found
+        :rtype: Customer
+
+        """
+        logger.info("Processing lookup or 404 for id %s ...", customer_id)
+        return cls.query.get_or_404(customer_id)
 
     @classmethod
     def find_by_phone(cls, phone):

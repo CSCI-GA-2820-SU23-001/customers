@@ -5,6 +5,8 @@ Test cases can be run with the following:
   nosetests -v --with-spec --spec-color
   coverage report -m
 """
+# pylint: disable=cyclic-import
+# pylint: disable=too-many-lines
 import os
 import logging
 import json
@@ -27,6 +29,7 @@ FLAG = False
 
 
 class TestYourResourceServer(TestCase):
+    # pylint: disable=too-many-public-methods
     """REST API SERVER Tests"""
     @classmethod
     def setUpClass(cls):

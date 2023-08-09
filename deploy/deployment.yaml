@@ -24,7 +24,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: customers
-        image: us.icr.io/nyu-devops/customers:1.0
+        image: us.icr.io/nikhilbyadav/customers:1.1
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
