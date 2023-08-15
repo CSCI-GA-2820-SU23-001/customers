@@ -72,7 +72,7 @@ customer_args.add_argument(
     "id",
     type=int,
     location="args",
-    required=True,
+    required=False,
     help="List Pets by id",
 )
 customer_args.add_argument(
@@ -101,7 +101,7 @@ customer_args.add_argument(
 ######################################################################
 #  PATH: /customers/{id}
 ######################################################################
-@api.route("/customers/<customer_id>")
+@api.route("/customers/<int:customer_id>")
 @api.param("customer_id", "The customer identifier")
 class CustomerResource(Resource):
     """
@@ -133,7 +133,7 @@ class CustomerResource(Resource):
             )
 
         app.logger.info("Returning customer: %s", customer.name)
-        return jsonify(customer.serialize()), status.HTTP_200_OK
+        return customer.serialize(), status.HTTP_200_OK
 
     # ------------------------------------------------------------------
     # MODIFY A CUSTOMER
@@ -161,9 +161,8 @@ class CustomerResource(Resource):
         customer.deserialize(data)
         customer.id = customer_id
         customer.update()
-        message = customer.serialize()
         app.logger.info("Customer with ID [%s] updated.", customer.id)
-        return jsonify(message), status.HTTP_200_OK
+        return customer.serialize(), status.HTTP_200_OK
 
     # ------------------------------------------------------------------
     # DELETE A CUSTOMER
@@ -201,10 +200,10 @@ class CustomerCollection(Resource):
         app.logger.info("Request for customer list")
         customers = []
         args = customer_args.parse_args()
-        if args["customer_id"]:
-            customers = Customer.find_by_id(args["customer_id"])
-        elif args["phone"]:
-            customers = Customer.find_by_phone(args["phone"])
+        if args["id"]:
+            customers = Customer.find(args["id"])
+        elif args["phone_number"]:
+            customers = Customer.find_by_phone(args["phone_number"])
         elif args["name"]:
             customers = Customer.find_by_name(args["name"])
         elif args["available"]:
@@ -214,7 +213,7 @@ class CustomerCollection(Resource):
 
         results = [customer.serialize() for customer in customers]
         app.logger.info("Returning %d customers", len(results))
-        return jsonify(results), status.HTTP_200_OK
+        return results, status.HTTP_200_OK
     # ------------------------------------------------------------------
     # ADD A NEW CUSTOMER
     # ------------------------------------------------------------------
@@ -235,14 +234,13 @@ class CustomerCollection(Resource):
         location_url = api.url_for(CustomerResource, customer_id=customer.id, _external=True)
         app.logger.info("Customer with ID [%s] created.", customer.id)
         print("Customer with ID ",customer.id, " created.")
-        message = customer.serialize()
-        return jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
+        return customer.serialize(), status.HTTP_201_CREATED, {"Location": location_url}
 
 
 ######################################################################
 #  PATH: /customers/{id}/suspend
 ######################################################################
-@api.route("/customers/<customer_id>/suspend")
+@api.route("/customers/<int:customer_id>/suspend")
 @api.param("customer_id", "Suspend customer")
 class SuspendResource(Resource):
     """Suspend actions on a customer"""
@@ -268,13 +266,13 @@ class SuspendResource(Resource):
         customer.available = False
         customer.update()
         app.logger.error("Customer with id %s suspend complete.", customer_id)
-        return (jsonify(customer.serialize()), status.HTTP_200_OK)
+        return customer.serialize(), status.HTTP_200_OK
 
 
 ######################################################################
 #  PATH: /customers/{id}/activate
 ######################################################################
-@api.route("/customers/<customer_id>/activate")
+@api.route("/customers/<int:customer_id>/activate")
 @api.param("customer_id", "Activate customer")
 class ActivateResource(Resource):
     """Activate actions on a customer"""
@@ -301,7 +299,7 @@ class ActivateResource(Resource):
         customer.available = True
         customer.update()
         app.logger.error("Customer with id %s activated complete.", customer_id)
-        return (jsonify(customer.serialize()), status.HTTP_200_OK)
+        return customer.serialize(), status.HTTP_200_OK
 
 
 ######################################################################
@@ -326,4 +324,3 @@ def check_content_type(content_type):
         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
         f"Content-Type must be {content_type}",
     )
-
