@@ -6,31 +6,32 @@ and SQL database
 """
 import sys
 from flask import Flask
+from flask_restx import Api
 from service import config
 from service.common import log_handlers
-from flask_restx import Api
 
 # Create Flask application
 app = Flask(__name__)
-app.config.from_object(config)
 app.url_map.strict_slashes = False
+app.config.from_object(config)
+app.config['ERROR_404_HELP'] = False
 
 ######################################################################
 # Configure Swagger before initializing it
 ######################################################################
 api = Api(
-    app,
-    version="1.0.0",
-    title="Customers REST API Service",
-    description="This is a Customers server.",
-    default="customers",
-    default_label="Customers server",
-    doc="/apidocs",  # default also could use doc='/apidocs/'
-    prefix="/api",
-)
+        app,
+        version='1.0.0',
+        title='Customers REST API Service',
+        description='This is the Customers microservice server.',
+        default='customers',
+        default_label='Customer operations',
+        doc='/apidocs',  # default also could use doc='/apidocs/'
+        prefix='/api',
+    )
 
 # Dependencies require we import the routes AFTER the Flask app is created
-# pylint: disable=wrong-import-position, wrong-import-order, cyclic-import
+# pylint: disable=wrong-import-position, wrong-import-order
 from service import routes, models  # noqa: E402, E261
 # pylint: disable=wrong-import-position
 from service.common import error_handlers, cli_commands  # noqa: F401, E402

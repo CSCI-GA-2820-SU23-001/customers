@@ -4,20 +4,17 @@ My Service
 Describe what your service does here
 """
 
-from flask import jsonify, request, url_for, make_response, abort
+from flask import request, make_response, abort
+from flask_restx import Resource, fields, reqparse, inputs
 from service.common import status  # HTTP Status Codes
 from service.models import Customer
-from functools import wraps
-from flask_restx import Resource, fields, reqparse, inputs
 from . import app, api
-
-# Import Flask application
-from . import app
-
 
 ######################################################################
 # Configure the Root route before OpenAPI
 ######################################################################
+
+
 @app.route("/")
 def index():
     """Root URL response"""
@@ -218,6 +215,7 @@ class CustomerCollection(Resource):
     # ------------------------------------------------------------------
     # ADD A NEW CUSTOMER
     # ------------------------------------------------------------------
+
     @api.doc("create_customers")
     @api.response(400, "The posted data was not valid")
     @api.expect(create_model)
@@ -234,7 +232,7 @@ class CustomerCollection(Resource):
         customer.create()
         location_url = api.url_for(CustomerResource, customer_id=customer.id, _external=True)
         app.logger.info("Customer with ID [%s] created.", customer.id)
-        print("Customer with ID ",customer.id, " created.")
+        print("Customer with ID ", customer.id, " created.")
         return customer.serialize(), status.HTTP_201_CREATED, {"Location": location_url}
 
 

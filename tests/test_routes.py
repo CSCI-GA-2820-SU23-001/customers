@@ -320,7 +320,7 @@ class TestYourResourceServer(TestCase):
         results = json.loads(response.data)
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0]['phone_number'], self.phone_number)
-        
+
     @patch.object(Customer, 'find')
     def test_get_customer_by_id(self, mock_find):
         """Get a Customer by its ID"""
@@ -338,7 +338,6 @@ class TestYourResourceServer(TestCase):
         self.assertEqual(data[0]["id"], 123)
         self.assertEqual(data[0]["name"], "Test Customer")
         mock_find.assert_called_once_with(123)
-        
 
     def test_missing_content_type(self):
         """Test missing Content-Type in headers"""
@@ -353,6 +352,3 @@ class TestYourResourceServer(TestCase):
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
         data = json.loads(response.data)
         self.assertEqual(data["message"], "Content-Type must be application/json")
-
-
-
