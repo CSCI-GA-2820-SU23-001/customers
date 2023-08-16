@@ -10,9 +10,9 @@ Usage:
 """
 import unittest
 from unittest.mock import patch, Mock
-from service.common import log_handlers
 import logging
 from flask import Flask
+from service.common import log_handlers
 
 
 class LogHandlersTests(unittest.TestCase):
