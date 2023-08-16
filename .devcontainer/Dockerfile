@@ -1,11 +1,16 @@
 # Image for a NYU Lab development environment
-FROM rofrano/nyu-devops-base:sp23
+FROM rofrano/pipeline-selenium
 
-# Uncomment below lines to add Selenium for BDD
-RUN sudo apt-get update && \
-    sudo apt-get install -y chromium-driver python3-selenium && \
-    sudo apt-get autoremove -y && \
-    sudo apt-get clean -y
+# Become a regular user for development
+ARG USERNAME=vscode
+USER $USERNAME
+
+## Uncomment below lines to add Selenium for BDD
+# RUN sudo apt-get update && \
+#     sudo apt-get install -y chromium-driver python3-selenium && \
+#     sudo apt-get autoremove -y && \
+#     sudo apt-get clean -y
+
 
 # Set up the Python development environment
 WORKDIR /app
