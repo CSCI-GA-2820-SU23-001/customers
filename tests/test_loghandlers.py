@@ -4,6 +4,7 @@ from service.common import log_handlers
 from flask import Flask
 import logging
 
+
 class LogHandlersTests(unittest.TestCase):
     def setUp(self):
         """Runs before every test"""
@@ -32,12 +33,13 @@ class LogHandlersTests(unittest.TestCase):
         log_handlers.init_logging(self.app, "mock-logger-name")
 
         # Assert the formatter was created with the right format string
-        mock_formatter_class.assert_called_once_with("[%(asctime)s] [%(levelname)s] [%(module)s] %(message)s", "%Y-%m-%d %H:%M:%S %z")
+        mock_formatter_class.assert_called_once_with(
+            "[%(asctime)s] [%(levelname)s] [%(module)s] %(message)s", "%Y-%m-%d %H:%M:%S %z")
 
         # Assert that the format has been set for both handlers
         mock_handler1.setFormatter.assert_called_once_with(mock_formatter)
         mock_handler2.setFormatter.assert_called_once_with(mock_formatter)
 
+
 if __name__ == "__main__":
     unittest.main()
-
