@@ -1,7 +1,7 @@
 # These can be overidden with env vars.
 CLUSTER ?= customer-cluster
 REGISTRY ?= us.icr.io
-NAMESPACE ?= nikhil
+NAMESPACE ?= nikhilbyadav
 IMAGE_NAME ?= customers
 IMAGE_TAG ?= 1.0
 IMAGE ?= $(REGISTRY)/$(NAMESPACE)/$(IMAGE_NAME):$(IMAGE_TAG)
@@ -71,6 +71,14 @@ login: ## Login to IBM Cloud using yur api key
 depoy: ## Deploy the service on local Kubernetes
 	$(info Deploying service locally...)
 	kubectl apply -f deploy/
+
+
+.PHONY: namespace
+namespace: ## Create the namespace assigned to the SPACE env variable
+	$(info Creatng the $(SPACE) namespace...)
+	kubectl create namespace $(SPACE) 
+	kubectl get secret all-icr-io -n default -o yaml | sed 's/default/$(SPACE)/g' | kubectl create -n $(SPACE) -f -
+	kubectl config set-context --current --namespace $(SPACE)
 
 ############################################################
 # COMMANDS FOR BUILDING THE IMAGE
