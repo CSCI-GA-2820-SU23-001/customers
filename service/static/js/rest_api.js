@@ -6,28 +6,28 @@ $(function () {
 
     // Updates the form with data from the response
     function update_form_data(res) {
-        $("#id").val(res.id);
-        $("#name").val(res.name);
-        $("#address").val(res.address);
-        $("#email").val(res.email);
-        $("#password").val(res.password);
-        $("#phone_number").val(res.phone_number);
+        $("#customer_id").val(res.id);
+        $("#customer_name").val(res.name);
+        $("#customer_address").val(res.address);
+        $("#customer_email").val(res.email);
+        $("#customer_password").val(res.password);
+        $("#customer_phone_number").val(res.phone_number);
         if (res.available == true) {
-            $("#available").val("true");
+            $("#customer_available").val("true");
         } else {
-            $("#available").val("false");
+            $("#customer_available").val("false");
         }
     }
 
     /// Clears all form fields
     function clear_form_data() {
-        $("#id").val("");
-        $("#name").val("");
-        $("#address").val("");
-        $("#email").val("");
-        $("#password").val("");
-        $("#phone_number").val("");
-        $("#available").val("");
+        $("#customer_id").val("");
+        $("#customer_name").val("");
+        $("#customer_address").val("");
+        $("#customer_email").val("");
+        $("#customer_password").val("");
+        $("#customer_phone_number").val("");
+        $("#customer_available").val("");
     }
 
     // Updates the flash message area
@@ -42,12 +42,12 @@ $(function () {
 
     $("#create-btn").click(function () {
 
-        let name = $("#name").val();
-        let address = $("#address").val();
-        let email = $("#email").val();
-        let password = $("#password").val();
-        let phone_number = $("#phone_number").val();
-        let available = $("#available").val()=="true";
+        let name = $("#customer_name").val();
+        let address = $("#customer_address").val();
+        let email = $("#customer_email").val();
+        let password = $("#customer_password").val();
+        let phone_number = $("#customer_phone_number").val();
+        let available = $("#customer_available").val()=="true";
 
         let data = {
             "name": name,
@@ -68,8 +68,7 @@ $(function () {
         });
 
         ajax.done(function(res){
-            clear_form_data()
-            // update_form_data(res)
+            update_form_data(res)
             flash_message("Success")
         });
 
@@ -85,13 +84,13 @@ $(function () {
 
     $("#update-btn").click(function () {
 
-        let id = $("#id").val();
-        let name = $("#name").val();
-        let address = $("#address").val();
-        let email = $("#email").val();
-        let password = $("#password").val();
-        let phone_number = $("#phone_number").val();
-        let available = $("#available").val()=="true";
+        let customer_id = $("#customer_id").val();
+        let name = $("#customer_name").val();
+        let address = $("#customer_address").val();
+        let email = $("#customer_email").val();
+        let password = $("#customer_password").val();
+        let phone_number = $("#customer_phone_number").val();
+        let available = $("#customer_available").val()=="true";
         
         let data = {
             "name": name,
@@ -106,7 +105,7 @@ $(function () {
 
         let ajax = $.ajax({
                 type: "PUT",
-                url: `/api/customers/${id}`,
+                url: `/api/customers/${customer_id}`,
                 contentType: "application/json",
                 data: JSON.stringify(data)
             })
@@ -128,13 +127,13 @@ $(function () {
 
     $("#retrieve-btn").click(function () {
 
-        let id = $("#id").val();
+        let customer_id = $("#customer_id").val();
 
         $("#flash_message").empty();
 
         let ajax = $.ajax({
             type: "GET",
-            url: `/api/customers/${id}`,
+            url: `/api/customers/${customer_id}`,
             contentType: "application/json",
             data: ''
         })
@@ -158,13 +157,13 @@ $(function () {
 
     $("#delete-btn").click(function () {
 
-        let id = $("#id").val();
+        let customer_id = $("#customer_id").val();
 
         $("#flash_message").empty();
 
         let ajax = $.ajax({
             type: "DELETE",
-            url: `/api/customers/${id}`,
+            url: `/api/customers/${customer_id}`,
             contentType: "application/json",
             data: '',
         })
@@ -184,7 +183,7 @@ $(function () {
     // ****************************************
 
     $("#clear-btn").click(function () {
-        $("#id").val("");
+        $("#customer_id").val("");
         $("#flash_message").empty();
         clear_form_data()
     });
@@ -194,16 +193,16 @@ $(function () {
     // ****************************************
 
     $("#search-btn").click(function () {
-        // let id = $("#id").val();
-        let name = $("#name").val();
-        let address = $("#address").val();
-        let email = $("#email").val();
-        let phone_number = $("#phone_number").val();
-        let available = $("#available").val();
+        // let id = $("#customer_id").val();
+        let name = $("#customer_name").val();
+        let address = $("#customer_address").val();
+        let email = $("#customer_email").val();
+        let phone_number = $("#customer_phone_number").val();
+        let available = $("#customer_available").val();
 
         let queryString = ""
-        // if (id) {
-        //     queryString += 'id=' + id
+        // if (customer_id) {
+        //     queryString += 'id=' + customer_id
         // }
         if (name) {
             if (queryString.length > 0) {
@@ -276,7 +275,7 @@ $(function () {
 
             // copy the first result to the form
             if (firstCustomer != "") {
-                // update_form_data(firstCustomer)
+                update_form_data(firstCustomer)
             }
 
             flash_message("Success")
