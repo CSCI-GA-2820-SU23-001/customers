@@ -201,7 +201,8 @@ class CustomerCollection(Resource):
         customers = []
         args = customer_args.parse_args()
         if args["id"]:
-            customers = Customer.find(args["id"])
+            customer = Customer.find(args["id"])
+            customers = [customer] if customer else []
         elif args["phone_number"]:
             customers = Customer.find_by_phone(args["phone_number"])
         elif args["name"]:
