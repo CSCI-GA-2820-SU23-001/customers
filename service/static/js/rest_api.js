@@ -252,7 +252,7 @@ $(function () {
 
         ajax.done(function(res){
             //alert(res.toSource())
-            $("#results").empty();
+            $("#search_results").empty();
             let table = '<table class="table table-striped" cellpadding="10">'
             table += '<thead><tr>'
             table += '<th class="col-md-2">ID</th>'
@@ -272,7 +272,7 @@ $(function () {
                 }
             }
             table += '</tbody></table>';
-            $("#results").append(table);
+            $("#search_results").append(table);
 
             // copy the first result to the form
             if (firstCustomer != "") {
