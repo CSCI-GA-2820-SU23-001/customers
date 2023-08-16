@@ -68,7 +68,8 @@ $(function () {
         });
 
         ajax.done(function(res){
-            update_form_data(res)
+            clear_form_data()
+            // update_form_data(res)
             flash_message("Success")
         });
 
@@ -251,7 +252,7 @@ $(function () {
 
         ajax.done(function(res){
             //alert(res.toSource())
-            $("#search_results").empty();
+            $("#results").empty();
             let table = '<table class="table table-striped" cellpadding="10">'
             table += '<thead><tr>'
             table += '<th class="col-md-2">ID</th>'
@@ -271,11 +272,11 @@ $(function () {
                 }
             }
             table += '</tbody></table>';
-            $("#search_results").append(table);
+            $("#results").append(table);
 
             // copy the first result to the form
             if (firstCustomer != "") {
-                update_form_data(firstCustomer)
+                // update_form_data(firstCustomer)
             }
 
             flash_message("Success")
