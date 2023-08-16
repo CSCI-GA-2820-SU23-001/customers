@@ -1,16 +1,11 @@
 """
 Custom Logging for My Application
-
-This module sets up and customizes logging functionalities tailored for My Application. It provides
-tools for recording events related to the application's operation, making it easier to monitor, debug, 
-and understand its behavior.
-
+This module sets up and customizes logging functionalities tailored for My Application.
 Features include:
 - Custom log format to include timestamp, log level, and message.
 - Log rotation to ensure log files don't consume too much disk space.
 - Logging to both console and files for versatility.
 - Adjustable log levels for filtering out less critical messages in production.
-
 Usage:
 """
 import unittest
