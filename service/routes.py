@@ -5,9 +5,9 @@ Describe what your service does here
 """
 
 from flask import request, make_response, abort
+from flask_restx import Resource, fields, reqparse, inputs
 from service.common import status  # HTTP Status Codes
 from service.models import Customer
-from flask_restx import Resource, fields, reqparse, inputs
 from . import app, api
 
 ######################################################################

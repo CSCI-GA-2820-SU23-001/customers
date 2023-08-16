@@ -1,11 +1,39 @@
+"""
+Custom Logging for My Application
+
+This module sets up and customizes logging functionalities tailored for My Application. It provides
+tools for recording events related to the application's operation, making it easier to monitor, debug, 
+and understand its behavior.
+
+Features include:
+- Custom log format to include timestamp, log level, and message.
+- Log rotation to ensure log files don't consume too much disk space.
+- Logging to both console and files for versatility.
+- Adjustable log levels for filtering out less critical messages in production.
+
+Usage:
+"""
 import unittest
 from unittest.mock import patch, Mock
 from service.common import log_handlers
-from flask import Flask
 import logging
+from flask import Flask
 
 
 class LogHandlersTests(unittest.TestCase):
+    """
+    Test cases for the Log Handlers module.
+
+    This test class contains unit tests that validate the functionality
+    of the Log Handlers module. The tests aim to ensure that the logging
+    setup and customization are functioning as expected.
+
+    Test cases include:
+    - Verifying log format matches the expected format.
+    - Checking if logging levels are correctly set.
+    - Ensuring that logging handlers are properly initialized.
+    """
+
     def setUp(self):
         """Runs before every test"""
         self.app = Flask(__name__)
