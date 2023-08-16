@@ -1,7 +1,7 @@
 # These can be overidden with env vars.
 CLUSTER ?= customer-cluster
 REGISTRY ?= us.icr.io
-NAMESPACE ?= nikhil
+NAMESPACE ?= nikhilbyadav
 IMAGE_NAME ?= customers
 IMAGE_TAG ?= 1.0
 IMAGE ?= $(REGISTRY)/$(NAMESPACE)/$(IMAGE_NAME):$(IMAGE_TAG)
