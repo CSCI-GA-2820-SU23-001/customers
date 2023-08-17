@@ -1,7 +1,7 @@
 """
 Flask CLI Command Extensions
 """
-from service import app
+from service import app  # pylint: disable=cyclic-import
 from service.models import db
 
 

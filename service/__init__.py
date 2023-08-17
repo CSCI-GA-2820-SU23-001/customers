@@ -32,7 +32,7 @@ api = Api(
 
 # Dependencies require we import the routes AFTER the Flask app is created
 # pylint: disable=wrong-import-position, wrong-import-order
-from service import routes, models  # noqa: E402, E261
+from service import routes, models  # pylint: disable=cyclic-import
 # pylint: disable=wrong-import-position
 from service.common import error_handlers, cli_commands  # noqa: F401, E402
 
