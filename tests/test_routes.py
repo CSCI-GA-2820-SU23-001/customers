@@ -20,7 +20,7 @@ from tests.factories import CustomerFactory
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/testdb"
 )
-BASE_URL = "/customers"
+BASE_URL = "/api/customers"
 FLAG = False
 
 ######################################################################
@@ -293,7 +293,7 @@ class TestYourResourceServer(TestCase):
         """ Get a list of Customers by name """
         customers = self._create_customers(5)
         target_name = customers[0].name
-        resp = self.app.get("/customers", query_string={"name": target_name})
+        resp = self.app.get("/api/customers", query_string={"name": target_name})
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()
         self.assertEqual(len(data), 1)
@@ -302,7 +302,7 @@ class TestYourResourceServer(TestCase):
     def test_list_customers_by_availability(self):
         """ Get a list of Customers by availability """
         self._create_customers(5)
-        resp = self.app.get("/customers", query_string={"available": "true"})
+        resp = self.app.get("/api/customers", query_string={"available": "true"})
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()
         self.assertTrue(all(cust['available'] for cust in data))
@@ -315,8 +315,40 @@ class TestYourResourceServer(TestCase):
         mock_customers = [Customer(phone_number=self.phone_number)]
         mock_find_by_phone.return_value = mock_customers
 
-        response = self.app.get(f'/customers?phone_number={self.phone_number}')
+        response = self.app.get(f'/api/customers?phone_number={self.phone_number}')
         self.assertEqual(response.status_code, 200)
         results = json.loads(response.data)
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0]['phone_number'], self.phone_number)
+
+    @patch.object(Customer, 'find')
+    def test_get_customer_by_id(self, mock_find):
+        """Get a Customer by its ID"""
+        # Assume we have a customer with ID 123 in the database
+        test_customer = Customer(id=123, name="Test Customer")
+        mock_find.return_value = test_customer
+
+        # Now use the test client to make the request
+        resp = self.app.get("/api/customers", query_string={"id": 123})
+
+        # Check the status code and the returned data
+        self.assertEqual(resp.status_code, 200)
+        data = resp.get_json()
+        self.assertEqual(len(data), 1)
+        self.assertEqual(data[0]["id"], 123)
+        self.assertEqual(data[0]["name"], "Test Customer")
+        mock_find.assert_called_once_with(123)
+
+    def test_missing_content_type(self):
+        """Test missing Content-Type in headers"""
+        response = self.app.post('/api/customers', data=json.dumps({
+            "name": "John",
+            "address": "123 Main St",
+            "email": "john@example.com",
+            "password": "password",
+            "phone_number": "123-456-7890",
+            "available": True
+        }))  # intentionally not setting the content-type header
+        self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+        data = json.loads(response.data)
+        self.assertEqual(data["message"], "Content-Type must be application/json")
